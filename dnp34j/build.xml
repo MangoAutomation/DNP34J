@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+
+<project name="dnp34j" basedir="." default="jar">
+   	<path id="master-classpath">
+        <fileset dir="lib">
+			<include name="*.jar" />
+		</fileset>
+		<pathelement path="target/classes" />
+	</path>
+
+	<target name="clean" description="Clean the target area">
+		<delete dir="target" />
+	</target>
+
+	<target name="compile" description="Compile main source tree java files">
+		<mkdir dir="target/classes" />
+		<javac destdir="target/classes" target="1.7" source="1.7" debug="true" debuglevel="lines,vars,source"
+                deprecation="true" optimize="false" failonerror="true" includeantruntime="false">
+			<src path="src" />
+			<classpath refid="master-classpath" />
+		</javac>
+	</target>
+
+	<target name="jar" depends="clean,compile" description="Create a jar file of the compiled classes">
+        <delete file="target/release/dnp34j.jar" />
+        <delete file="target/classes/MANIFEST.MF" />
+        <tstamp>
+            <format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" />
+        </tstamp>
+
+        <manifest file="target/classes/MANIFEST.MF">
+<!--             <attribute name="Built-By" value="${vendor}" /> -->
+            <attribute name="Build-Date" value="${TODAY}" />
+<!--             <attribute name="Version" value="${maven-pom.version}" /> -->
+        </manifest>
+
+        <mkdir dir="target/classes/lib" />
+        <mkdir dir="target/classes/META-INF"/>
+        
+        <copy todir="target/classes/src" preservelastmodified="true">
+            <fileset dir="src"><include name="**/*.*"/></fileset>
+        </copy>
+        
+        <jar destfile="dnp34j.jar" manifest="target/classes/MANIFEST.MF">
+            <fileset dir="target/classes">
+                <include name="**/*.class" />
+                <include name="**/*.java" />
+                <exclude name="MANIFEST.MF" />
+                <include name="META-INF/*.*"/>
+            </fileset>
+        </jar>
+	</target>
+</project>
