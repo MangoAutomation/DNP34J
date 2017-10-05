@@ -73,8 +73,8 @@ public class TransportLayer implements AppFeatures, InitFeatures {
 
         while (anAppFrame.length() != 0) {
             int length = Math.min(TRANSPORT_FRAME_SIZE_MAX - 1, anAppFrame.length());
-            header = (byte) (sequence + ((sequence == 0) ? 0x40 : 0x00) + ((anAppFrame.length() == length) ? 0x80
-                    : 0x00));
+            header = (byte) (sequence + ((sequence == 0) ? 0x40 : 0x00)
+                    + ((anAppFrame.length() == length) ? 0x80 : 0x00));
             pushLower(header, anAppFrame, length);
             sequence += 1;
         }
@@ -87,8 +87,7 @@ public class TransportLayer implements AppFeatures, InitFeatures {
         byte TH = trsFrame.readByte();
         if (DEBUG && !checkTransportMsg(TH, currentRemoteStation)) {
             System.out.println("[Transport] ERROR : transport frame incorrect. ");
-        }
-        else {
+        } else {
             pushUpper(TH, trsFrame, currentRemoteStation);
         }
     }
@@ -97,7 +96,7 @@ public class TransportLayer implements AppFeatures, InitFeatures {
     private boolean checkTransportMsg(byte TH, int currentRemoteStation) throws Exception {
         boolean valid = true;
 
-        byte trsSeq = (byte) (TH & 0x2F);
+        byte trsSeq = (byte) (TH & 0x3F);
 
         if (trsFirstFrame[currentRemoteStation]) {
             if ((TH & 0x40) != 0x40) {
@@ -110,8 +109,7 @@ public class TransportLayer implements AppFeatures, InitFeatures {
 
             trsLastSeq[currentRemoteStation] = trsSeq;
             trsFirstFrame[currentRemoteStation] = false;
-        }
-        else // check if it's the frame expected
+        } else // check if it's the frame expected
         {
             if (trsLastSeq[currentRemoteStation] != trsSeq) {
                 if (DEBUG) {
@@ -145,12 +143,9 @@ public class TransportLayer implements AppFeatures, InitFeatures {
     /**
      * DOCUMENT ME!
      * 
-     * @param header
-     *            DOCUMENT ME!
-     * @param anAppFrame
-     *            DOCUMENT ME!
-     * @param length
-     *            DOCUMENT ME!
+     * @param header DOCUMENT ME!
+     * @param anAppFrame DOCUMENT ME!
+     * @param length DOCUMENT ME!
      */
     private void pushLower(byte header, Buffer anAppFrame, int length) throws Exception {
         lnkSnd.getLnkSndBuffer().writeByte(header);
@@ -167,8 +162,7 @@ public class TransportLayer implements AppFeatures, InitFeatures {
     }
 
     /**
-     * @param trsFrame
-     *            the trsFrame to set
+     * @param trsFrame the trsFrame to set
      */
     public void setTrsFrame(Buffer[] trsFrame) {
         this.trsFrame = trsFrame;
@@ -182,8 +176,7 @@ public class TransportLayer implements AppFeatures, InitFeatures {
     }
 
     /**
-     * @param trsFirstFrame
-     *            the trsFirstFrame to set
+     * @param trsFirstFrame the trsFirstFrame to set
      */
     public void setTrsFirstFrame(boolean[] trsFirstFrame) {
         this.trsFirstFrame = trsFirstFrame;
@@ -197,8 +190,7 @@ public class TransportLayer implements AppFeatures, InitFeatures {
     }
 
     /**
-     * @param trsLastSeq
-     *            the trsLastSeq to set
+     * @param trsLastSeq the trsLastSeq to set
      */
     public void setTrsLastSeq(byte[] trsLastSeq) {
         this.trsLastSeq = trsLastSeq;
@@ -212,8 +204,7 @@ public class TransportLayer implements AppFeatures, InitFeatures {
     }
 
     /**
-     * @param appRcv
-     *            the appRcv to set
+     * @param appRcv the appRcv to set
      */
     public void setAppRcv(AppRcv appRcv) {
         this.appRcv = appRcv;
@@ -227,8 +218,7 @@ public class TransportLayer implements AppFeatures, InitFeatures {
     }
 
     /**
-     * @param appSnd
-     *            the appSnd to set
+     * @param appSnd the appSnd to set
      */
     public void setAppSnd(AppSnd appSnd) {
         this.appSnd = appSnd;
@@ -242,8 +232,7 @@ public class TransportLayer implements AppFeatures, InitFeatures {
     }
 
     /**
-     * @param lnkRcv
-     *            the lnkRcv to set
+     * @param lnkRcv the lnkRcv to set
      */
     public void setLnkRcv(LnkRcv lnkRcv) {
         this.lnkRcv = lnkRcv;
@@ -257,8 +246,7 @@ public class TransportLayer implements AppFeatures, InitFeatures {
     }
 
     /**
-     * @param lnkSnd
-     *            the lnkSnd to set
+     * @param lnkSnd the lnkSnd to set
      */
     public void setLnkSnd(LnkSnd lnkSnd) {
         this.lnkSnd = lnkSnd;

@@ -65,7 +65,7 @@ public class DNPUser implements InitFeatures, DataMapFeatures, AppFeatures {
 
         userRcvLock = new Lock();
         Thread.sleep(1000);
-        boolean ok = resetLink(500);
+        boolean ok = resetLink(config.getRequestTimeout());
         if (!ok)
             throw new Exception("Reset Link Failed!");
     }
@@ -101,8 +101,8 @@ public class DNPUser implements InitFeatures, DataMapFeatures, AppFeatures {
     }
 
     public Buffer buildAnalogControlCommand(byte operateMode, int index, int value) {
-        Buffer commandFrame = appSnd.buildRequestMsg(operateMode, ANALOG_OUTPUT_COMMAND, (byte) 2, new int[] { index },
-                WITH_DATA);
+        Buffer commandFrame = appSnd.buildRequestMsg(operateMode, ANALOG_OUTPUT_COMMAND, (byte) 2,
+                new int[] {index}, WITH_DATA);
 
         byte[] valueOnBytes = toBytes(value, 2);
         commandFrame.setMarker(7);
@@ -114,9 +114,10 @@ public class DNPUser implements InitFeatures, DataMapFeatures, AppFeatures {
         return commandFrame;
     }
 
-    public Buffer buildBinaryControlCommand(byte operateMode, int index, byte controlCode, int timeOn, int timeOff) {
-        Buffer commandFrame = appSnd.buildRequestMsg(operateMode, BINARY_OUTPUT_COMMAND, (byte) 1, new int[] { index },
-                WITH_DATA);
+    public Buffer buildBinaryControlCommand(byte operateMode, int index, byte controlCode,
+            int timeOn, int timeOff) {
+        Buffer commandFrame = appSnd.buildRequestMsg(operateMode, BINARY_OUTPUT_COMMAND, (byte) 1,
+                new int[] {index}, WITH_DATA);
         // int previous_marker = commandFrame.length();
 
         commandFrame.writeByte(toBytes(index, 1)[0]);
