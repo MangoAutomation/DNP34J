@@ -6,24 +6,25 @@ import java.util.List;
 import br.org.scadabr.dnp34j.master.session.DNPUser;
 import br.org.scadabr.dnp34j.master.session.config.DNPConfig;
 import br.org.scadabr.dnp34j.master.session.config.EthernetParameters;
-import br.org.scadabr.dnp34j.master.session.config.SerialParameters;
 import br.org.scadabr.dnp34j.master.session.database.DataBuffer;
 import br.org.scadabr.dnp34j.master.session.database.DataElement;
+import br.org.scadabr.dnp34j.serial.SerialPortWrapper;
 
 public class ScadaBRInterface {
     private DNPUser user;
     private DNPConfig configuration;
     private int staticPollFrequence = 30;
 
-    public void initEthernet(EthernetParameters parameters, int masterAddress, int slaveAddress, int staticPollFrequence)
-            throws Exception {
+    public void initEthernet(EthernetParameters parameters, int masterAddress, int slaveAddress,
+            int staticPollFrequence) throws Exception {
         configuration = new DNPConfig(parameters, masterAddress, slaveAddress);
         this.staticPollFrequence = staticPollFrequence;
         init(configuration);
     }
 
-    public void initSerial(SerialParameters parameters, int masterAddress, int slaveAddress, int staticPollFrequence)
-            throws Exception {
+    public void initSerial(SerialPortWrapper parameters, int masterAddress, int slaveAddress,
+            int staticPollFrequence) throws Exception {
+
         configuration = new DNPConfig(parameters, masterAddress, slaveAddress);
         this.staticPollFrequence = staticPollFrequence;
         init(configuration);
@@ -41,8 +42,7 @@ public class ScadaBRInterface {
         if (pollCount == 0) {
             doStaticPoll();
             pollCount++;
-        }
-        else {
+        } else {
             doRBEPoll();
             pollCount++;
             if (pollCount > staticPollFrequence)
@@ -104,7 +104,7 @@ public class ScadaBRInterface {
     }
 
     public DataElement getElement(byte group, int index) {
-        //      return null;
+        // return null;
         List<DataElement> list = user.getDatabase().read(index, group);
         if (list.isEmpty())
             return null;

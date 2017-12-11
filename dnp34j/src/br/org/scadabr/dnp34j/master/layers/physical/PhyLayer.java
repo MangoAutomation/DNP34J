@@ -13,12 +13,12 @@ import br.org.scadabr.dnp34j.master.session.DNPUser;
 import br.org.scadabr.dnp34j.master.session.config.DNPConfig;
 import br.org.scadabr.dnp34j.master.session.config.DNPConfig.COMM;
 import br.org.scadabr.dnp34j.master.session.config.EthernetParameters;
-import br.org.scadabr.dnp34j.master.session.config.SerialParameters;
+import br.org.scadabr.dnp34j.serial.SerialPortWrapper;
 
 /**
  * <p>
- * This class manages the physical connection with the remote DNP device. It allows link layer to send frames & unlock
- * it when data is available
+ * This class manages the physical connection with the remote DNP device. It allows link layer to
+ * send frames & unlock it when data is available
  * 
  * @author <a href="mailto:alexis.clerc@sysaware.com">Alexis CLERC
  *         &lt;alexis.clerc@sysaware.com&gt;</a>
@@ -36,10 +36,7 @@ public class PhyLayer implements LnkFeatures, InitFeatures {
     private int commType;
     private String commAddress;
     private int port;
-    private int baudrate;
-    private int dataBits;
-    private int stopBits;
-    private int parity;
+    private SerialPortWrapper serialPort;
     private DNPConfig config;
     private LnkRcv lnkRcv;
     private PhySERIAL phySERIAL;
@@ -48,8 +45,7 @@ public class PhyLayer implements LnkFeatures, InitFeatures {
     private PhyLayer phyLayer;
 
     /**
-     * Constructor. Initalize physical port, with InitFeatures & MainClass
-     * parameters
+     * Constructor. Initalize physical port, with InitFeatures & MainClass parameters
      */
     // =============================================================================
     // Constructor
@@ -75,22 +71,14 @@ public class PhyLayer implements LnkFeatures, InitFeatures {
 
                 setInputStream(phyETHERNET.getInputStream());
                 setOutputStream(phyETHERNET.getOutputStream());
-            }
-            else if (config.getCommType() == COMM.SERIAL) {
-                SerialParameters parameters = (SerialParameters) config.getCommConfig();
-                setCommAddress(parameters.getCommAddress());
-                setBaudrate(parameters.getBaudrate());
-                setDataBits(parameters.getDatabits());
-                setStopBits(parameters.getStopbits());
-                setParity(parameters.getParity());
+            } else if (config.getCommType() == COMM.SERIAL) {
+                this.serialPort = (SerialPortWrapper) config.getCommConfig();
                 setPhySERIAL(new PhySERIAL(this));
-
                 setInputStream(phySERIAL.getInputStream());
                 setOutputStream(phySERIAL.getOutputStream());
             }
             sendingBytes = new Buffer(S);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             this.close();
             throw new Exception("Connection fault", e);
         }
@@ -105,21 +93,20 @@ public class PhyLayer implements LnkFeatures, InitFeatures {
     public void reconnect() throws Exception {
         try {
             switch (commType) {
-            case SERIAL:
-                if (phySERIAL != null) {
-                    phySERIAL.close();
-                    phySERIAL.init();
-                }
-                break;
-            case ETHERNET:
-                if (phyETHERNET != null) {
-                    phyETHERNET.close();
-                    phyETHERNET.init();
-                }
-                break;
+                case SERIAL:
+                    if (phySERIAL != null) {
+                        phySERIAL.close();
+                        phySERIAL.init();
+                    }
+                    break;
+                case ETHERNET:
+                    if (phyETHERNET != null) {
+                        phyETHERNET.close();
+                        phyETHERNET.init();
+                    }
+                    break;
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("[PhyLayer] - reconnect() failed");
             e.printStackTrace();
             throw new Exception(e);
@@ -148,8 +135,7 @@ public class PhyLayer implements LnkFeatures, InitFeatures {
     /**
      * DOCUMENT ME!
      * 
-     * @param someByte
-     *            DOCUMENT ME!
+     * @param someByte DOCUMENT ME!
      */
     public synchronized void write(byte[] someByte) throws Exception {
         sendingBytes.reset();
@@ -161,15 +147,13 @@ public class PhyLayer implements LnkFeatures, InitFeatures {
                 try {
                     outputStream.write(sendingBytes.readBytes(size));
                     outputStream.flush();
-                }
-                catch (ArrayIndexOutOfBoundsException e) {
+                } catch (ArrayIndexOutOfBoundsException e) {
                     if (DEBUG) {
                         System.out.println("[PhyLayer] outPut down");
                     }
                 }
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             if (DEBUG) {
                 System.out.println("[PhyLayer] Writing Exception");
                 System.out.println("[PhyLayer] Remote Connection closed.");
@@ -185,8 +169,7 @@ public class PhyLayer implements LnkFeatures, InitFeatures {
     }
 
     /**
-     * @param inputStream
-     *            the inputStream to set
+     * @param inputStream the inputStream to set
      */
     public void setInputStream(InputStream inputStream) {
         this.inputStream = inputStream;
@@ -200,8 +183,7 @@ public class PhyLayer implements LnkFeatures, InitFeatures {
     }
 
     /**
-     * @param outputStream
-     *            the outputStream to set
+     * @param outputStream the outputStream to set
      */
     public void setOutputStream(OutputStream outputStream) {
         this.outputStream = outputStream;
@@ -215,9 +197,8 @@ public class PhyLayer implements LnkFeatures, InitFeatures {
     }
 
     /**
-     * @param sendingBytes
-     *            the sendinif (phyETHERNET != null) { phyETHERNET.close();
-     *            phyETHERNET.init(); gBytes to set
+     * @param sendingBytes the sendinif (phyETHERNET != null) { phyETHERNET.close();
+     *        phyETHERNET.init(); gBytes to set
      */
     public void setSendingBytes(Buffer sendingBytes) {
         this.sendingBytes = sendingBytes;
@@ -231,8 +212,7 @@ public class PhyLayer implements LnkFeatures, InitFeatures {
     }
 
     /**
-     * @param uri
-     *            the uri to set
+     * @param uri the uri to set
      */
     public void setUri(String uri) {
         this.uri = uri;
@@ -246,8 +226,7 @@ public class PhyLayer implements LnkFeatures, InitFeatures {
     }
 
     /**
-     * @param comm
-     *            the comm to set
+     * @param comm the comm to set
      */
     public void setCommType(int commType) {
         this.commType = commType;
@@ -261,76 +240,18 @@ public class PhyLayer implements LnkFeatures, InitFeatures {
     }
 
     /**
-     * @param commAddress
-     *            the commAddress to set
+     * @param commAddress the commAddress to set
      */
     public void setCommAddress(String commAddress) {
         this.commAddress = commAddress;
     }
 
-    /**
-     * @return the baudrate
-     */
-    public int getBaudrate() {
-        return baudrate;
+    public SerialPortWrapper getSerialPort() {
+        return this.serialPort;
     }
 
     /**
-     * @param baudrate
-     *            the baudrate to set
-     */
-    public void setBaudrate(int baudrate) {
-        this.baudrate = baudrate;
-    }
-
-    /**
-     * @return the dataBits
-     */
-    public int getDataBits() {
-        return dataBits;
-    }
-
-    /**
-     * @param dataBits
-     *            the dataBits to set
-     */
-    public void setDataBits(int dataBits) {
-        this.dataBits = dataBits;
-    }
-
-    /**
-     * @return the stopBits
-     */
-    public int getStopBits() {
-        return stopBits;
-    }
-
-    /**
-     * @param stopBits
-     *            the stopBits to set
-     */
-    public void setStopBits(int stopBits) {
-        this.stopBits = stopBits;
-    }
-
-    /**
-     * @return the parity
-     */
-    public int getParity() {
-        return parity;
-    }
-
-    /**
-     * @param parity
-     *            the parity to set
-     */
-    public void setParity(int parity) {
-        this.parity = parity;
-    }
-
-    /**
-     * @param config
-     *            the config to set
+     * @param config the config to set
      */
     public void setConfig(DNPConfig config) {
         this.config = config;
@@ -344,8 +265,7 @@ public class PhyLayer implements LnkFeatures, InitFeatures {
     }
 
     /**
-     * @param lnkRcv
-     *            the lnkRcv to set
+     * @param lnkRcv the lnkRcv to set
      */
     public void setLnkRcv(LnkRcv lnkRcv) {
         this.lnkRcv = lnkRcv;
@@ -359,8 +279,7 @@ public class PhyLayer implements LnkFeatures, InitFeatures {
     }
 
     /**
-     * @param phySERIAL
-     *            the phySERIAL to set
+     * @param phySERIAL the phySERIAL to set
      */
     public void setPhySERIAL(PhySERIAL phySERIAL) {
         this.phySERIAL = phySERIAL;
@@ -374,8 +293,7 @@ public class PhyLayer implements LnkFeatures, InitFeatures {
     }
 
     /**
-     * @param phyETHERNET
-     *            the phyETHERNET to set
+     * @param phyETHERNET the phyETHERNET to set
      */
     public void setPhyETHERNET(PhyETHERNET phyETHERNET) {
         this.phyETHERNET = phyETHERNET;
@@ -389,8 +307,7 @@ public class PhyLayer implements LnkFeatures, InitFeatures {
     }
 
     /**
-     * @param socket
-     *            the socket to set
+     * @param socket the socket to set
      */
     public void setSocket(Socket socket) {
         this.socket = socket;
@@ -404,8 +321,7 @@ public class PhyLayer implements LnkFeatures, InitFeatures {
     }
 
     /**
-     * @param phyLayer
-     *            the phyLayer to set
+     * @param phyLayer the phyLayer to set
      */
     public void setPhyLayer(PhyLayer phyLayer) {
         this.phyLayer = phyLayer;
@@ -419,8 +335,7 @@ public class PhyLayer implements LnkFeatures, InitFeatures {
     }
 
     /**
-     * @param port
-     *            the port to set
+     * @param port the port to set
      */
     public void setPort(int port) {
         this.port = port;

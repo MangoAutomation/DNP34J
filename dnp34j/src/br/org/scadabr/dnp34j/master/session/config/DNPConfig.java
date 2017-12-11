@@ -1,5 +1,7 @@
 package br.org.scadabr.dnp34j.master.session.config;
 
+import br.org.scadabr.dnp34j.serial.SerialPortWrapper;
+
 public class DNPConfig {
 
     private int requestRetries = 5;
@@ -10,7 +12,7 @@ public class DNPConfig {
     private boolean REQ_APP_CONFIRM;
 
     private int masterAddress;
-    //    private int slaveAddress;
+    // private int slaveAddress;
     private int[] DNPAddressList;
     private COMM commType;
     private Object commConfig;
@@ -23,17 +25,17 @@ public class DNPConfig {
         this.commType = COMM.ETHERNET;
         this.commConfig = parameters;
         this.masterAddress = masterAddress;
-        //        this.slaveAddress = slaveAddress;
-        this.setDNPAddressList(new int[] { masterAddress, slaveAddress });
+        // this.slaveAddress = slaveAddress;
+        this.setDNPAddressList(new int[] {masterAddress, slaveAddress});
 
     }
 
-    public DNPConfig(SerialParameters parameters, int masterAddress, int slaveAddress) {
+    public DNPConfig(SerialPortWrapper serialPort, int masterAddress, int slaveAddress) {
         this.commType = COMM.SERIAL;
-        this.commConfig = parameters;
+        this.commConfig = serialPort;
         this.masterAddress = masterAddress;
-        //        this.slaveAddress = slaveAddress;
-        this.setDNPAddressList(new int[] { masterAddress, slaveAddress });
+        // this.slaveAddress = slaveAddress;
+        this.setDNPAddressList(new int[] {masterAddress, slaveAddress});
     }
 
     public boolean isREQ_LNK_CONFIRM() {
@@ -76,13 +78,13 @@ public class DNPConfig {
         this.masterAddress = masterAddress;
     }
 
-    //	public int getSlaveAddress() {
-    //		return slaveAddress;
-    //	}
+    // public int getSlaveAddress() {
+    // return slaveAddress;
+    // }
     //
-    //	public void setSlaveAddress(int slaveAddress) {
-    //		this.slaveAddress = slaveAddress;
-    //	}
+    // public void setSlaveAddress(int slaveAddress) {
+    // this.slaveAddress = slaveAddress;
+    // }
     //
     public void setDNPAddressList(int[] dNPAddressList) {
         DNPAddressList = dNPAddressList;

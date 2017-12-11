@@ -4,11 +4,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import br.org.scadabr.dnp34j.master.common.InitFeatures;
-
-import com.serotonin.io.serial.SerialParameters;
-import com.serotonin.io.serial.SerialPortException;
-import com.serotonin.io.serial.SerialPortProxy;
-import com.serotonin.io.serial.SerialUtils;
+import br.org.scadabr.dnp34j.serial.SerialPortWrapper;
 
 /**
  * DOCUMENT ME!
@@ -22,14 +18,13 @@ public class PhySERIAL implements InitFeatures {
     // =============================================================================
     // Attributes
     // =============================================================================
-    private SerialPortProxy serialPort;
+    private SerialPortWrapper serialPort;
     private PhyLayer phyLayer;
     private String commPortId;
     private int baudrate;
     private int dataBits;
     private int stopBits;
     private int parity;
-    private SerialParameters serialParams;
     private InputStream inputStream;
     private OutputStream outputStream;
 
@@ -46,93 +41,49 @@ public class PhySERIAL implements InitFeatures {
     }
 
     private void initialize(PhyLayer phyLayer) throws Exception {
-        if (DEBUG) {
-            System.out.print("[PhyLayer] Located Serial Ports : ");
-        }
 
-        if (DEBUG) {
-            System.out.println("\n Open port " + phyLayer.getUri());
-        }
-
-        try {
-            setCommPortId(phyLayer.getCommAddress());
-            setBaudrate(phyLayer.getBaudrate());
-            setDataBits(phyLayer.getDataBits());
-            setStopBits(phyLayer.getStopBits());
-            setParity(phyLayer.getParity());
-
-        }
-        catch (Exception e) {
-            // TODO: handle exception
-        }
-
-        SerialParameters serialParams = new SerialParameters();
-
-        serialParams.setCommPortId(commPortId);
-        serialParams.setBaudRate(baudrate);
-        serialParams.setDataBits(dataBits);
-        serialParams.setStopBits(stopBits);
-        serialParams.setParity(parity);
-
-        // System.out.println("serialParams [commPortId]:: " + commPortId);
-        // System.out.println("serialParams [baudrate]:: " + baudrate);
-        // System.out.println("serialParams [dataBits]:: " + dataBits);
-        // System.out.println("serialParams [stopBits]:: " + stopBits);
-        // System.out.println("serialParams [parity]:: " + parity);
-
-        try {
-            serialPort = SerialUtils.openSerialPort(serialParams);// (SerialPort)
-        }
-        catch (SerialPortException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        this.serialPort = phyLayer.getSerialPort();
+        serialPort.open();
 
         setInputStream(serialPort.getInputStream());
         setOutputStream(serialPort.getOutputStream());
 
-        // try {
-        // serialPort.setSerialPortParams(phyLayer.getBaudrate(), phyLayer
-        // .getDataBits(), phyLayer.getStopBits(), phyLayer
-        // .getParity());
-        // } catch (gnu.io.UnsupportedCommOperationException e) {
-        // }
     }
 
     // =============================================================================
     // Methods
     // =============================================================================
-    //    public static CommPortIdentifier serialPortIdentifier(String port) throws Exception {
-    //        CommPortIdentifier result = null;
-    //        Enumeration<?> commEnum = CommPortIdentifier.getPortIdentifiers();
-    //        CommPortIdentifier cpi;
+    // public static CommPortIdentifier serialPortIdentifier(String port) throws Exception {
+    // CommPortIdentifier result = null;
+    // Enumeration<?> commEnum = CommPortIdentifier.getPortIdentifiers();
+    // CommPortIdentifier cpi;
     //
-    //        while (commEnum.hasMoreElements()) {
-    //            cpi = (CommPortIdentifier) commEnum.nextElement();
+    // while (commEnum.hasMoreElements()) {
+    // cpi = (CommPortIdentifier) commEnum.nextElement();
     //
-    //            if (cpi.getPortType() == CommPortIdentifier.PORT_SERIAL) {
-    //                // if (cpi.getName().substring(3).equals(port.substring(3))) {
-    //                if (cpi.getName().equals(port)) {
-    //                    result = cpi;
-    //                }
-    //            }
-    //        }
+    // if (cpi.getPortType() == CommPortIdentifier.PORT_SERIAL) {
+    // // if (cpi.getName().substring(3).equals(port.substring(3))) {
+    // if (cpi.getName().equals(port)) {
+    // result = cpi;
+    // }
+    // }
+    // }
     //
-    //        return result;
-    //    }
+    // return result;
+    // }
     //
-    //    /**
-    //     * DOCUMENT ME!
-    //     * 
-    //     * @param port
-    //     *            DOCUMENT ME!
-    //     * 
-    //     * @return DOCUMENT ME!
-    //     */
-    //    public static boolean serialPortAvailable(String port) throws Exception {
-    //        boolean available = serialPortIdentifier(port) != null ? true : false;
-    //        return available;
-    //    }
+    // /**
+    // * DOCUMENT ME!
+    // *
+    // * @param port
+    // * DOCUMENT ME!
+    // *
+    // * @return DOCUMENT ME!
+    // */
+    // public static boolean serialPortAvailable(String port) throws Exception {
+    // boolean available = serialPortIdentifier(port) != null ? true : false;
+    // return available;
+    // }
 
     public void close() {
         closeClient();
@@ -144,10 +95,8 @@ public class PhySERIAL implements InitFeatures {
                 @Override
                 public void run() {
                     try {
-                        SerialUtils.close(serialPort);
-                        // serialPort.close();
-                    }
-                    catch (Exception e) {
+                        serialPort.close();
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -158,8 +107,7 @@ public class PhySERIAL implements InitFeatures {
                 t.join(50000);
                 if (t.isAlive())
                     t.interrupt();
-            }
-            catch (InterruptedException e) {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
@@ -173,8 +121,7 @@ public class PhySERIAL implements InitFeatures {
     }
 
     /**
-     * @param phyLayer
-     *            the phyLayer to set
+     * @param phyLayer the phyLayer to set
      */
     public void setPhyLayer(PhyLayer phyLayer) {
         this.phyLayer = phyLayer;
@@ -220,14 +167,6 @@ public class PhySERIAL implements InitFeatures {
         this.parity = parity;
     }
 
-    public SerialParameters getSerialParams() {
-        return serialParams;
-    }
-
-    public void setSerialParams(SerialParameters serialParams) {
-        this.serialParams = serialParams;
-    }
-
     public InputStream getInputStream() {
         return inputStream;
     }
@@ -245,7 +184,7 @@ public class PhySERIAL implements InitFeatures {
     }
 
     // boolean available = false;
-    //		
+    //
     // if (serialPortIdentifier(port) != null) {
     // available = true;
     // }
