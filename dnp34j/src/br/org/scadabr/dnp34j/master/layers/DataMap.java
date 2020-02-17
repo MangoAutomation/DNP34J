@@ -1,10 +1,8 @@
 /*
  * Data Map class
  *
- * Class    com.itlity.protocol.master.DataMap
- * File     DataMap.java
- * Author   Alexis CLERC <alexis.clerc@sysaware.com>
- * (c)      SysAware <http://www.sysaware.com>
+ * Class com.itlity.protocol.master.DataMap File DataMap.java Author Alexis CLERC
+ * <alexis.clerc@sysaware.com> (c) SysAware <http://www.sysaware.com>
  *
  */
 package br.org.scadabr.dnp34j.master.layers;
@@ -36,31 +34,25 @@ public class DataMap implements DataMapFeatures, InitFeatures {
     }
 
     /**
-     * Set objects of a group/variation. Return a copy of data joined in the
-     * request Range : [index(values[0]), index(values[1]), ...
-     * ,index(values[values.length-1])]
+     * Set objects of a group/variation. Return a copy of data joined in the request Range :
+     * [index(values[0]), index(values[1]), ... ,index(values[values.length-1])]
      * 
-     * @param group
-     *            Object group
-     * @param variation
-     *            Object variation
-     * @param values
-     *            indexes of updated objects
-     * @param newDataObjects
-     *            updated objects to submit
-     * @param qualifier
-     *            either INDEXES_8 or INDEXES_16 quelifier
+     * @param group Object group
+     * @param variation Object variation
+     * @param values indexes of updated objects
+     * @param newDataObjects updated objects to submit
+     * @param qualifier either INDEXES_8 or INDEXES_16 quelifier
      * 
      * @return a range of Data Objects
      */
-    public byte[] set(byte group, byte variation, int[] values, DataObject[] newDataObjects, byte qualifier) {
+    public byte[] set(byte group, byte variation, int[] values, DataObject[] newDataObjects,
+            byte qualifier) {
         Buffer getData = new Buffer(S);
 
         for (int i = 0; i < values.length; i++) {
             if ((qualifier & 0xF0) == 0x10) {
                 getData.writeByte((byte) values[i]);
-            }
-            else {
+            } else {
                 getData.writeBytes(values[i]);
             }
 
@@ -77,19 +69,14 @@ public class DataMap implements DataMapFeatures, InitFeatures {
     // }
 
     /**
-     * Set objects of a group/variation. Return a copy of data joined in the
-     * request Range : [index[start], index[start+1], ... ,index[stop]]
+     * Set objects of a group/variation. Return a copy of data joined in the request Range :
+     * [index[start], index[start+1], ... ,index[stop]]
      * 
-     * @param group
-     *            Object group
-     * @param variation
-     *            Object variation
-     * @param start
-     *            range start
-     * @param stop
-     *            range stop
-     * @param newDataObjects
-     *            updated objects to submit
+     * @param group Object group
+     * @param variation Object variation
+     * @param start range start
+     * @param stop range stop
+     * @param newDataObjects updated objects to submit
      * 
      * @return a range of Data Objects
      */
@@ -100,26 +87,20 @@ public class DataMap implements DataMapFeatures, InitFeatures {
 
         if (DataObject.length(group, variation) == 1) {
             setBits(group, variation, start, stop, newDataObjects);
-        }
-        else {
+        } else {
             setBytes(group, variation, start, stop, newDataObjects);
         }
     }
 
     /**
-     * Set bits objects of a group/variation. Return a copy of data joined in
-     * the request Range : [index[start], index[start+1], ... ,index[stop]]
+     * Set bits objects of a group/variation. Return a copy of data joined in the request Range :
+     * [index[start], index[start+1], ... ,index[stop]]
      * 
-     * @param group
-     *            Object group
-     * @param variation
-     *            Object variation
-     * @param start
-     *            range start
-     * @param stop
-     *            range stop
-     * @param newDataObjects
-     *            updated objects to submit
+     * @param group Object group
+     * @param variation Object variation
+     * @param start range start
+     * @param stop range stop
+     * @param newDataObjects updated objects to submit
      * 
      * @return a range of Data Objects
      */
@@ -144,19 +125,14 @@ public class DataMap implements DataMapFeatures, InitFeatures {
     }
 
     /**
-     * Set bytes objects of a group/variation. Return a copy of data joined in
-     * the request Range : [index[start], index[start+1], ... ,index[stop]]
+     * Set bytes objects of a group/variation. Return a copy of data joined in the request Range :
+     * [index[start], index[start+1], ... ,index[stop]]
      * 
-     * @param group
-     *            Object group
-     * @param variation
-     *            Object variation
-     * @param start
-     *            range start
-     * @param stop
-     *            range stop
-     * @param newDataObjects
-     *            updated objects to submit
+     * @param group Object group
+     * @param variation Object variation
+     * @param start range start
+     * @param stop range stop
+     * @param newDataObjects updated objects to submit
      * 
      * @return a range of Data Objects
      */
@@ -168,8 +144,7 @@ public class DataMap implements DataMapFeatures, InitFeatures {
         for (int i = start; i < (stop + 1); i++) {
             try {
                 System.arraycopy(newDataObjects, (i - start) * length, newDO, 0, length);
-            }
-            catch (ArrayIndexOutOfBoundsException aioobe) {
+            } catch (ArrayIndexOutOfBoundsException aioobe) {
                 continue;
             }
             setDB(i, newDO, group, variation);
@@ -183,18 +158,15 @@ public class DataMap implements DataMapFeatures, InitFeatures {
      * <p>
      * Update database
      * <ul>
-     * <li>set new value (Boolean for Binary Input & Output, Integer for Counters, Analog Input & Output)
+     * <li>set new value (Boolean for Binary Input & Output, Integer for Counters, Analog Input &
+     * Output)
      * <li>set quality
      * </ul>
      * 
-     * @param index
-     *            index point
-     * @param data
-     *            updated value
-     * @param group
-     *            object group
-     * @param variation
-     *            object variation
+     * @param index index point
+     * @param data updated value
+     * @param group object group
+     * @param variation object variation
      */
     private void setDB(int index, byte[] data, byte group, byte variation) {
         DataElement rec = new DataElement();
@@ -203,87 +175,94 @@ public class DataMap implements DataMapFeatures, InitFeatures {
         rec.setTimestamp(System.currentTimeMillis());
         // set value & Q_INVALID quality
         switch (DataObject.getObjectType(group)) {
-        case BIN_IN: {
-            rec.setValue(DataObject.unformatBool(group, variation, data, (false)).toString());
+            case BIN_IN: {
+                rec.setValue(DataObject.unformatBool(group, variation, data, (false)).toString());
 
-            if (variation == 2) {
-                rec.setQuality(data[0]);
+                if (variation == 2) {
+                    rec.setQuality(data[0]);
+                } else {
+                    // rec.quality = DataObject.setFlag(rec);
+                }
+
+                if ((group == 2) && (variation == 2)) // Binary Input Change with
+                // Time
+                {
+                    byte[] time = new byte[6];
+                    System.arraycopy(data, 1, time, 0, 6);
+                    rec.setTimestamp(DataObject.setTime(time));
+                }
             }
-            else {
+
+                break;
+
+            case BIN_OUT: {
+                rec.setValue(DataObject.unformatBool(group, variation, data, (false)).toString());
+
+                if (variation == 2) {
+                    rec.setQuality(data[0]);
+                } else {
+                    // rec.quality = DataObject.setFlag(rec);
+                }
+            }
+
+                break;
+
+            case COUNTER: {
+                // rec.setValue(DataObject.unformatFloat(group, variation, data,
+                // element.getScale(), element.getOffset()));
                 // rec.quality = DataObject.setFlag(rec);
             }
 
-            if ((group == 2) && (variation == 2)) // Binary Input Change with
-            // Time
-            {
-                byte[] time = new byte[6];
-                System.arraycopy(data, 1, time, 0, 6);
-                rec.setTimestamp(DataObject.setTime(time));
+                break;
+
+            case ANA_IN: {
+                if (variation < 3) {
+                    rec.setQuality(data[0]);
+                    rec.setValue("" + DataObject.unformatFloat(group, variation, data, 1, 0));
+                } else if (variation == 7) {
+                    // Floating point change with timestamp
+                    rec.setQuality(data[0]);
+                    rec.setValue("" + DataObject.unformatFloat(group, variation, data, 1, 0));
+                    rec.setTimestamp(DataObject.toLong(data, 5, 6));
+                } else if (variation == 3) {
+                    // Analog change with timestamp
+                    rec.setQuality(data[0]);
+                    rec.setValue("" + DataObject.unformatFloat(group, variation, data, 1, 0));
+                    rec.setTimestamp(DataObject.toLong(data, 5, 6));
+                } else {
+                    rec.setValue("" + DataObject.unformatFloat(group, variation, data, 1, 0));
+                    // rec.quality = DataObject.setFlag(rec);
+                }
             }
-        }
 
-            break;
+                break;
 
-        case BIN_OUT: {
-            rec.setValue(DataObject.unformatBool(group, variation, data, (false)).toString());
+            case ANA_OUT: {
+                rec.setValue("" + DataObject.unformatFloat(group, variation, data, 1, 0));
 
-            if (variation == 2) {
-                rec.setQuality(data[0]);
+                if (group == 40) {
+                    rec.setQuality(data[0]);
+                } else {
+                    // rec.quality = DataObject.setFlag(rec);
+                }
             }
-            else {
+
+                break;
+
+            case TIME: {
+                // rec.setValue(DataObject.unformatFloat(group, variation, data,
+                // element.getScale(), element.getOffset()));
                 // rec.quality = DataObject.setFlag(rec);
             }
-        }
-
-            break;
-
-        case COUNTER: {
-            // rec.setValue(DataObject.unformatFloat(group, variation, data,
-            // element.getScale(), element.getOffset()));
-            // rec.quality = DataObject.setFlag(rec);
-        }
-
-            break;
-
-        case ANA_IN: {
-            rec.setValue("" + DataObject.unformatFloat(group, variation, data, 1, 0));
-            if (variation < 3) {
-                rec.setQuality(data[0]);
-            }
-            else {
-                // rec.quality = DataObject.setFlag(rec);
-            }
-        }
-
-            break;
-
-        case ANA_OUT: {
-            rec.setValue("" + DataObject.unformatFloat(group, variation, data, 1, 0));
-
-            if (group == 40) {
-                rec.setQuality(data[0]);
-            }
-            else {
-                // rec.quality = DataObject.setFlag(rec);
-            }
-        }
-
-            break;
-
-        case TIME: {
-            // rec.setValue(DataObject.unformatFloat(group, variation, data,
-            // element.getScale(), element.getOffset()));
-            // rec.quality = DataObject.setFlag(rec);
-        }
-        default:
-            // ignore
+            default:
+                // ignore
         }
         if (user.getDatabase() != null)
             user.getDatabase().writeRecord(rec);
         // elem.writeNewRecord(rec);
         if (DEBUG) {
-            System.out.println("[DataMap " + this + "] Set : (G,V,I, value) " + group + " variation:" + variation
-                    + " index: " + index);
+            System.out.println("[DataMap " + this + "] Set : (G,V,I, value) " + group
+                    + " variation:" + variation + " index: " + index);
         }
     }
 
