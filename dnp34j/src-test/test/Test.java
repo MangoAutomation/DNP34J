@@ -46,7 +46,7 @@ public class Test {
     }
 
     static void doRBEPoll() throws Exception {
-        user.sendSynch(user.buildReadEventDataMsg());
+        user.sendSynch(user.buildReadAllEventDataMsg());
     }
 
     static void dumpValues() {

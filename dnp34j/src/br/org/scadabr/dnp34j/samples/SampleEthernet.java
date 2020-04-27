@@ -84,7 +84,7 @@ public class SampleEthernet {
                         user.sendSynch(user.buildReadStaticDataMsg());
                         pollingCount++;
                     } else {
-                        user.sendSynch(user.buildReadEventDataMsg());
+                        user.sendSynch(user.buildReadAllEventDataMsg());
                         pollingCount++;
                         if (pollingCount > relativePollingPeriod)
                             pollingCount = 0;
