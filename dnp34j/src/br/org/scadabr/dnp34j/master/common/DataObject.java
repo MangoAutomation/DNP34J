@@ -72,13 +72,13 @@ public class DataObject implements InitFeatures, DataMapFeatures {
                         24, // v02 : 16-Bit Counter Change without time
                         0, 0, 88, // v05 : 32-Bit Counter Change with time
                         72}},
-
+            //Group 30
             {{40, // v01 : 32-Bit Ana Input
                 24, // v02 : 16-Bit Ana Input
                 32, // v03 : 32-Bit Ana Input without Flag
                 16, // v04 : 16-Bit Ana Input without Flag
                 40}, // v05 : 32-Bit Floating Point Ana Input with Flag
-
+                            //Group 31 (Experimental support for frozen analog input)
                             {40, // v01 : 32-Bit Ana Change Event without Time
                     24, // v02 : 16-Bit Ana Change Event without Time
                     88, // v03 : 32-Bit Ana Change Event with Time
@@ -86,6 +86,15 @@ public class DataObject implements InitFeatures, DataMapFeatures {
                     -1, // v05 ??
                     -1, // v06 ??
                     88 // v07 : 32-Bit Floating Point Change Event with Time
+                            },
+                            //Group 32
+                            {40, // v01 : 32-Bit Ana Change Event without Time
+                                24, // v02 : 16-Bit Ana Change Event without Time
+                                88, // v03 : 32-Bit Ana Change Event with Time
+                                72, // v04 ??
+                                -1, // v05 ??
+                                -1, // v06 ??
+                                88 // v07 : 32-Bit Floating Point Change Event with Time
                             }},
 
             {{40, // v01 : 32-Bit Ana Output Status with flag
@@ -343,7 +352,7 @@ public class DataObject implements InitFeatures, DataMapFeatures {
             int i = 0;
 
             // Special case for 32 bit Float type
-            if ((group == 30 && (variation == 7 || variation == 5 )) || (group == 40 && variation == 3)){
+            if ((group == 30 && (variation == 7 || variation == 5 )) || (group == 32 && (variation == 7 || variation == 5 )) || (group == 40 && variation == 3)){
                 i++; // com flag
                 // Convert to IEEE Float
                 ByteBuffer b = ByteBuffer.wrap(Arrays.copyOfRange(data, i, i + 4))

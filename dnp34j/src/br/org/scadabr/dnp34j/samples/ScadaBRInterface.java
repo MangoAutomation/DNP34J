@@ -56,7 +56,7 @@ public class ScadaBRInterface {
     }
 
     private void doRBEPoll() throws Exception {
-        user.sendSynch(user.buildReadEventDataMsg());
+        user.sendSynch(user.buildReadAllEventDataMsg());
     }
 
     public void terminate() throws Exception {

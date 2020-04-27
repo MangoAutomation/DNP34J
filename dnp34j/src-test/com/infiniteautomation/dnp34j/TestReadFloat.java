@@ -16,7 +16,7 @@ import br.org.scadabr.dnp34j.master.session.config.EthernetParameters;
 import br.org.scadabr.dnp34j.master.session.database.DataElement;
 
 /**
- * 
+ *
  * @author Terry Packer
  */
 public class TestReadFloat {
@@ -37,7 +37,7 @@ public class TestReadFloat {
         try {
             for (int i = 0; i < 100; i++) {
                 try {
-                    user.sendSynch(user.buildReadEventDataMsg());
+                    user.sendSynch(user.buildReadAllEventDataMsg());
                     // Read float at index 2
                     List<DataElement> elements = user.getDatabase().read(2, 0x30);
                     if (elements != null) {

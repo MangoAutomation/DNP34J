@@ -90,7 +90,13 @@ public class DNPUser implements InitFeatures, DataMapFeatures, AppFeatures {
         return request;
     }
 
-    public Buffer buildReadEventDataMsg() {
+    public Buffer buildReadDataMsg(byte group, byte classVar) {
+        Buffer request = new Buffer(S);
+        request = appSnd.addObjectToRequest(request, READ, group, classVar);
+        return request;
+    }
+
+    public Buffer buildReadAllEventDataMsg() {
         Buffer request = new Buffer(S);
 
         request = appSnd.addObjectToRequest(request, READ, CLASS_STATIC, CLASS_1_VAR);
