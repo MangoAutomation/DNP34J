@@ -17,7 +17,7 @@ import br.org.scadabr.dnp34j.master.session.database.DataElement;
 /**
  * <p>
  * This class is an interface between database and DNP Master application
- * 
+ *
  * @author <a href="mailto:alexis.clerc@sysaware.com">Alexis CLERC
  *         &lt;alexis.clerc@sysaware.com&gt;</a>
  */
@@ -36,13 +36,13 @@ public class DataMap implements DataMapFeatures, InitFeatures {
     /**
      * Set objects of a group/variation. Return a copy of data joined in the request Range :
      * [index(values[0]), index(values[1]), ... ,index(values[values.length-1])]
-     * 
+     *
      * @param group Object group
      * @param variation Object variation
      * @param values indexes of updated objects
      * @param newDataObjects updated objects to submit
      * @param qualifier either INDEXES_8 or INDEXES_16 quelifier
-     * 
+     *
      * @return a range of Data Objects
      */
     public byte[] set(byte group, byte variation, int[] values, DataObject[] newDataObjects,
@@ -71,13 +71,13 @@ public class DataMap implements DataMapFeatures, InitFeatures {
     /**
      * Set objects of a group/variation. Return a copy of data joined in the request Range :
      * [index[start], index[start+1], ... ,index[stop]]
-     * 
+     *
      * @param group Object group
      * @param variation Object variation
      * @param start range start
      * @param stop range stop
      * @param newDataObjects updated objects to submit
-     * 
+     *
      * @return a range of Data Objects
      */
     public void set(byte group, byte variation, int start, int stop, byte[] newDataObjects) {
@@ -95,13 +95,13 @@ public class DataMap implements DataMapFeatures, InitFeatures {
     /**
      * Set bits objects of a group/variation. Return a copy of data joined in the request Range :
      * [index[start], index[start+1], ... ,index[stop]]
-     * 
+     *
      * @param group Object group
      * @param variation Object variation
      * @param start range start
      * @param stop range stop
      * @param newDataObjects updated objects to submit
-     * 
+     *
      * @return a range of Data Objects
      */
     private void setBits(byte group, byte variation, int start, int stop, byte[] newDataObjects) {
@@ -127,13 +127,13 @@ public class DataMap implements DataMapFeatures, InitFeatures {
     /**
      * Set bytes objects of a group/variation. Return a copy of data joined in the request Range :
      * [index[start], index[start+1], ... ,index[stop]]
-     * 
+     *
      * @param group Object group
      * @param variation Object variation
      * @param start range start
      * @param stop range stop
      * @param newDataObjects updated objects to submit
-     * 
+     *
      * @return a range of Data Objects
      */
     private void setBytes(byte group, byte variation, int start, int stop, byte[] newDataObjects) {
@@ -162,7 +162,7 @@ public class DataMap implements DataMapFeatures, InitFeatures {
      * Output)
      * <li>set quality
      * </ul>
-     * 
+     *
      * @param index index point
      * @param data updated value
      * @param group object group
@@ -185,7 +185,7 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                 }
 
                 if ((group == 2) && (variation == 2)) // Binary Input Change with
-                // Time
+                    // Time
                 {
                     byte[] time = new byte[6];
                     System.arraycopy(data, 1, time, 0, 6);
@@ -193,7 +193,7 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                 }
             }
 
-                break;
+            break;
 
             case BIN_OUT: {
                 rec.setValue(DataObject.unformatBool(group, variation, data, (false)).toString());
@@ -205,7 +205,7 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                 }
             }
 
-                break;
+            break;
 
             case COUNTER: {
                 // rec.setValue(DataObject.unformatFloat(group, variation, data,
@@ -213,7 +213,7 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                 // rec.quality = DataObject.setFlag(rec);
             }
 
-                break;
+            break;
 
             case ANA_IN: {
                 if (variation < 3) {
@@ -229,13 +229,17 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                     rec.setQuality(data[0]);
                     rec.setValue("" + DataObject.unformatFloat(group, variation, data, 1, 0));
                     rec.setTimestamp(DataObject.toLong(data, 5, 6));
+                } else if (variation == 5) {
+                    // Analog input with flag
+                    rec.setQuality(data[0]);
+                    rec.setValue("" + DataObject.unformatFloat(group, variation, data, 1, 0));
                 } else {
                     rec.setValue("" + DataObject.unformatFloat(group, variation, data, 1, 0));
                     // rec.quality = DataObject.setFlag(rec);
                 }
             }
 
-                break;
+            break;
 
             case ANA_OUT: {
                 rec.setValue("" + DataObject.unformatFloat(group, variation, data, 1, 0));
@@ -247,7 +251,7 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                 }
             }
 
-                break;
+            break;
 
             case TIME: {
                 // rec.setValue(DataObject.unformatFloat(group, variation, data,

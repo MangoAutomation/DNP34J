@@ -16,7 +16,7 @@ import br.org.scadabr.dnp34j.master.common.utils.Utils;
 /**
  * <p>
  * Properties of DNP3 library objects
- * 
+ *
  * @author Alexis CLERC
  */
 public class DataObject implements InitFeatures, DataMapFeatures {
@@ -50,56 +50,56 @@ public class DataObject implements InitFeatures, DataMapFeatures {
     // };
 
     static byte[][][] size = {{null, {1, // v01 : Bin Input
-            8}, // v02 : Bin Input with status
-            {8, // v01 : Bin Input Change
-                    56 // v02 : Bin Input Change with time
-                    , 24}}, // v03 : Bin Input Change with relative time
+        8}, // v02 : Bin Input with status
+        {8, // v01 : Bin Input Change
+            56 // v02 : Bin Input Change with time
+            , 24}}, // v03 : Bin Input Change with relative time
 
             {{1, // v01 : Bin Output
-                    8}, // v02 : Bin Output with status
-                    null,
+                8}, // v02 : Bin Output with status
+                null,
 
-                    {88 // v01 : Control Relay Output Block
-                    }},
+                {88 // v01 : Control Relay Output Block
+                }},
 
             {{40, // v01 : 32-Bit Bin Counter
-                    24, // v02 : 16-Bit Bin Counter
-                    0, 0, 32, // v05 : 32-Bit Counter without Flag
-                    16}, // v06 : 16-Bit Counter without Flag
+                24, // v02 : 16-Bit Bin Counter
+                0, 0, 32, // v05 : 32-Bit Counter without Flag
+                16}, // v06 : 16-Bit Counter without Flag
                     {-40, -24, -40, -24, -88, -72, -88, -72, -32},
 
                     {40, // v01 : 32-Bit Counter Change without time
-                            24, // v02 : 16-Bit Counter Change without time
-                            0, 0, 88, // v05 : 32-Bit Counter Change with time
-                            72}},
+                        24, // v02 : 16-Bit Counter Change without time
+                        0, 0, 88, // v05 : 32-Bit Counter Change with time
+                        72}},
 
             {{40, // v01 : 32-Bit Ana Input
-                    24, // v02 : 16-Bit Ana Input
-                    32, // v03 : 32-Bit Ana Input without Flag
-                    16}, // v04 : 16-Bit Ana Input without Flag
-                    null,
+                24, // v02 : 16-Bit Ana Input
+                32, // v03 : 32-Bit Ana Input without Flag
+                16, // v04 : 16-Bit Ana Input without Flag
+                40}, // v05 : 32-Bit Floating Point Ana Input with Flag
 
-                    {40, // v01 : 32-Bit Ana Change Event without Time
-                            24, // v02 : 16-Bit Ana Change Event without Time
-                            88, // v03 : 32-Bit Ana Change Event with Time
-                            72, // v04 ??
-                            -1, // v05 ??
-                            -1, // v06 ??
-                            88 // v07 : 32-Bit Floating Point Change Event with Time
-                    }},
+                            {40, // v01 : 32-Bit Ana Change Event without Time
+                    24, // v02 : 16-Bit Ana Change Event without Time
+                    88, // v03 : 32-Bit Ana Change Event with Time
+                    72, // v04 ??
+                    -1, // v05 ??
+                    -1, // v06 ??
+                    88 // v07 : 32-Bit Floating Point Change Event with Time
+                            }},
 
             {{40, // v01 : 32-Bit Ana Output Status
-                    24}, // v02 : 16-Bit Ana Output Status
-                    {40, // v01 : 32-Bit Ana Output Block
-                            24 // v02 : 16-Bit Ana Output Block
-                    }},
+                24}, // v02 : 16-Bit Ana Output Status
+                                {40, // v01 : 32-Bit Ana Output Block
+                    24 // v02 : 16-Bit Ana Output Block
+                                }},
 
             {{48}, // v01 : Time and Date
-                    {-48},
+                                    {-48},
 
-                    {16, // v01 : Time Delay Coarse
-                            16 // v02 : Time Delay Fine
-                    }},
+                                    {16, // v01 : Time Delay Coarse
+                                        16 // v02 : Time Delay Fine
+                                    }},
 
             {{0 // v 01 : doesn't carry any information in itself
             }},
@@ -130,11 +130,11 @@ public class DataObject implements InitFeatures, DataMapFeatures {
 
     /**
      * Build a dataObject
-     * 
+     *
      * @param type DataType of this object
      * @param g Object group
      * @param v Object variation
-     * 
+     *
      * @throws IllegalArgumentException
      *         <ul>
      *         <li>objectType doesn't match with group attribute
@@ -153,10 +153,10 @@ public class DataObject implements InitFeatures, DataMapFeatures {
 
     /**
      * Build a dataObject
-     * 
+     *
      * @param g Object group
      * @param v Object variation
-     * 
+     *
      * @throws IllegalArgumentException
      *         <ul>
      *         <li>object with this group and variation attributes is not known
@@ -174,11 +174,11 @@ public class DataObject implements InitFeatures, DataMapFeatures {
 
     /**
      * Build a dataObject filled with data
-     * 
+     *
      * @param g Object group
      * @param v Object variation
      * @param someBytes Object data
-     * 
+     *
      * @throws IllegalArgumentException
      *         <ul>
      *         <li>object with this group and variation attributes is not known
@@ -205,10 +205,10 @@ public class DataObject implements InitFeatures, DataMapFeatures {
 
     /**
      * DataObject length. This method is called when group and length are coded in decimal format
-     * 
+     *
      * @param g Object group
      * @param v Object variation
-     * 
+     *
      * @return object size, <tt>0</tt> if there's no object coding, <tt>-1</tt> if this object is
      *         not supported
      */
@@ -218,15 +218,15 @@ public class DataObject implements InitFeatures, DataMapFeatures {
 
     /**
      * DataObject length. This method is called when group and length are coded in hexa format
-     * 
+     *
      * @param g Object group
      * @param v Object variation
-     * 
+     *
      * @return object size, 0 if there's no object coding, -1 if this object is not supported
      */
     public static byte fixedLength(byte g, byte v) {
-        int first4bits = (int) ((g >> 4) & 0x0F);
-        int last4bits = (int) (g & 0x0F);
+        int first4bits = (g >> 4) & 0x0F;
+        int last4bits = g & 0x0F;
         byte res;
 
         // System.out.println("fixedLength() Group: " + g + " Variation: " + v);
@@ -246,10 +246,10 @@ public class DataObject implements InitFeatures, DataMapFeatures {
 
     /**
      * Verify if this object is include in DNP Object Table
-     * 
+     *
      * @param g Object group
      * @param v Object variation
-     * 
+     *
      * @return object is include in DNP Object Table
      */
     public static boolean isValid(byte g, byte v) {
@@ -259,10 +259,10 @@ public class DataObject implements InitFeatures, DataMapFeatures {
     /**
      * Verify if this object is include in DNP Object Table and if group matches with the type of
      * the data
-     * 
+     *
      * @param g Object group
      * @param v Object variation
-     * 
+     *
      * @return object is include in DNP Object Table and group matches with the type of the data
      */
     public static boolean isValid(byte type, byte g, byte v) {
@@ -271,7 +271,7 @@ public class DataObject implements InitFeatures, DataMapFeatures {
 
     /**
      * Display this Data Object
-     * 
+     *
      * @return String representation of Data Object
      */
     public String output() {
@@ -284,9 +284,9 @@ public class DataObject implements InitFeatures, DataMapFeatures {
 
     /**
      * Get an ObjectType (BIN_IN, BIN_OUT, COUNTER, ANA_IN, ..) from a group attribute
-     * 
+     *
      * @param group group attribute
-     * 
+     *
      * @return an object type
      */
     public static byte getObjectType(byte group) {
@@ -295,9 +295,9 @@ public class DataObject implements InitFeatures, DataMapFeatures {
 
     /**
      * Display Data Objects, useful for trace Get ot Set functions
-     * 
+     *
      * @param someDataObjects data objects to display
-     * 
+     *
      * @return String representation of these objects
      */
     public static void displayDataObjects(DataObject[] someDataObjects) {
@@ -322,13 +322,13 @@ public class DataObject implements InitFeatures, DataMapFeatures {
     /**
      * Extract an Integer value from an array of bytes, formatted with group and variation
      * attributes. Suits for Counters and Analogs
-     * 
+     *
      * @param group Data Object group
      * @param variation Data Object variation
      * @param data data to extract
      * @param scale scale to apply after unformatting
      * @param offset offset to apply after unformatting
-     * 
+     *
      * @return extracted value
      */
     public static float unformatFloat(byte group, byte variation, byte[] data, int scale,
@@ -342,7 +342,7 @@ public class DataObject implements InitFeatures, DataMapFeatures {
             int i = 0;
 
             // Special case for Float type
-            if (variation == 7) {
+            if (variation == 7 || variation == 5 ) {
                 i++; // com flag
                 // Convert to IEEE Float
                 ByteBuffer b = ByteBuffer.wrap(Arrays.copyOfRange(data, i, i + 4))
@@ -395,12 +395,12 @@ public class DataObject implements InitFeatures, DataMapFeatures {
     /**
      * Extract a Boolean value from an array of bytes, formatted with group and variation attributes
      * Suits for Binary Input & Output
-     * 
+     *
      * @param group Data Object group
      * @param variation Data Object variation
      * @param data data to extract
      * @param inverted logic to apply after unformatting
-     * 
+     *
      * @return extracted value
      */
     public static Boolean unformatBool(byte group, byte variation, byte[] data, boolean inverted) {
@@ -426,9 +426,9 @@ public class DataObject implements InitFeatures, DataMapFeatures {
 
     /**
      * Get time from a 6 dnp3-formatted bytes
-     * 
+     *
      * @param someBytes DNP formatted time value
-     * 
+     *
      * @return time extracted
      */
     public static long setTime(byte[] someBytes) {
@@ -448,7 +448,7 @@ public class DataObject implements InitFeatures, DataMapFeatures {
 
     /**
      * Format CurrentTime to a 6 dnp3-formatted bytes
-     * 
+     *
      * @return DNP formatted time value
      */
     public static byte[] getTime(long time) {
