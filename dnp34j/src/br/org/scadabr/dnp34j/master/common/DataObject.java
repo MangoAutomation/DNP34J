@@ -88,8 +88,9 @@ public class DataObject implements InitFeatures, DataMapFeatures {
                     88 // v07 : 32-Bit Floating Point Change Event with Time
                             }},
 
-            {{40, // v01 : 32-Bit Ana Output Status
-                24}, // v02 : 16-Bit Ana Output Status
+            {{40, // v01 : 32-Bit Ana Output Status with flag
+                24, // v02 : 16-Bit Ana Output Status with flag
+                40}, //v03 : 32 bit Floating point Ana Output Status with flag
                                 {40, // v01 : 32-Bit Ana Output Block
                     24 // v02 : 16-Bit Ana Output Block
                                 }},
@@ -341,8 +342,8 @@ public class DataObject implements InitFeatures, DataMapFeatures {
         } else {
             int i = 0;
 
-            // Special case for Float type
-            if (variation == 7 || variation == 5 ) {
+            // Special case for 32 bit Float type
+            if ((group == 30 && (variation == 7 || variation == 5 )) || (group == 40 && variation == 3)){
                 i++; // com flag
                 // Convert to IEEE Float
                 ByteBuffer b = ByteBuffer.wrap(Arrays.copyOfRange(data, i, i + 4))
