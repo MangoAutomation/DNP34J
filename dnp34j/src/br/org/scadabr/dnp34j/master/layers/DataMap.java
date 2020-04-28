@@ -173,97 +173,501 @@ public class DataMap implements DataMapFeatures, InitFeatures {
         rec.setIndex(index);
         rec.setGroup(DataObject.getObjectType(group));
         rec.setTimestamp(System.currentTimeMillis());
-        // set value & Q_INVALID quality
-        switch (DataObject.getObjectType(group)) {
-            case BIN_IN: {
-                rec.setValue(DataObject.unformatBool(group, variation, data, (false)).toString());
+        rec.setSpecificGroup(group);
+        rec.setVariation(variation);
 
-                if (variation == 2) {
-                    rec.setQuality(data[0]);
-                } else {
-                    // rec.quality = DataObject.setFlag(rec);
-                }
-
-                if ((group == 2) && (variation == 2)) // Binary Input Change with
-                    // Time
-                {
-                    byte[] time = new byte[6];
-                    System.arraycopy(data, 1, time, 0, 6);
-                    rec.setTimestamp(DataObject.setTime(time));
-                }
-            }
-
-            break;
-
-            case BIN_OUT: {
-                rec.setValue(DataObject.unformatBool(group, variation, data, (false)).toString());
-
-                if (variation == 2) {
-                    rec.setQuality(data[0]);
-                } else {
-                    // rec.quality = DataObject.setFlag(rec);
-                }
-            }
-
-            break;
-
-            case COUNTER: {
-                // rec.setValue(DataObject.unformatFloat(group, variation, data,
-                // element.getScale(), element.getOffset()));
-                // rec.quality = DataObject.setFlag(rec);
-            }
-
-            break;
-
-            case ANA_IN: {
-                if (variation < 3) {
-                    rec.setQuality(data[0]);
-                    rec.setValue("" + DataObject.unformatFloat(group, variation, data, 1, 0));
-                } else if (variation == 7) {
-                    // Floating point change with timestamp
-                    rec.setQuality(data[0]);
-                    rec.setValue("" + DataObject.unformatFloat(group, variation, data, 1, 0));
-                    rec.setTimestamp(DataObject.toLong(data, 5, 6));
-                } else if (variation == 3) {
-                    // Analog change with timestamp
-                    rec.setQuality(data[0]);
-                    rec.setValue("" + DataObject.unformatFloat(group, variation, data, 1, 0));
-                    rec.setTimestamp(DataObject.toLong(data, 5, 6));
-                } else if (variation == 5) {
-                    // Analog input with flag
-                    rec.setQuality(data[0]);
-                    rec.setValue("" + DataObject.unformatFloat(group, variation, data, 1, 0));
-                } else {
-                    rec.setValue("" + DataObject.unformatFloat(group, variation, data, 1, 0));
-                    // rec.quality = DataObject.setFlag(rec);
-                }
-            }
-
-            break;
-
-            case ANA_OUT: {
-                rec.setValue("" + DataObject.unformatFloat(group, variation, data, 1, 0));
-
-                if (group == 40) {
-                    rec.setQuality(data[0]);
-                } else {
-                    // rec.quality = DataObject.setFlag(rec);
-                }
-            }
-
-            break;
-
-            case TIME: {
-                // rec.setValue(DataObject.unformatFloat(group, variation, data,
-                // element.getScale(), element.getOffset()));
-                // rec.quality = DataObject.setFlag(rec);
-            }
-            default:
-                // ignore
+        //Set Quality if supported
+        if (rec.supportsQuality()) {
+            rec.setQuality(data[0]);
         }
+
+        //Extract the value
+        switch(group) {
+            case BINARY_INPUT_STATIC:
+                switch(variation) {
+                    case 1:
+                        rec.setValue(new Boolean(((data[0] & 0b00000001) != 0)).toString());
+                        break;
+                    case 2:
+                        rec.setValue(new Boolean(((data[0] & 0b10000000) != 0)).toString());
+                        break;
+                }
+                break;
+            case BINARY_INPUT_EVENTS:
+                switch(variation) {
+                    case 1:
+                        rec.setValue(new Boolean(((data[0] & 0b10000000) != 0)).toString());
+                        break;
+                    case 2:
+                        rec.setValue(new Boolean(((data[0] & 0b10000000) != 0)).toString());
+                        //Has time
+                        rec.setTimestamp(DataObject.toLong(data, 1, 6));
+                        break;
+                    case 3:
+                        rec.setValue(new Boolean(((data[0] & 0b10000000) != 0)).toString());
+                        //Common time of occurrence not supported yet so not extracting relative 2 bytes of ms
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case BINARY_OUTPUT_STATIC:
+                switch(variation) {
+                    case 1:
+                        rec.setValue(new Boolean(((data[0] & 0b00000001) != 0)).toString());
+                        break;
+                    case 2:
+                        rec.setValue(new Boolean(((data[0] & 0b10000000) != 0)).toString());
+                        break;
+                }
+                break;
+            case BINARY_OUTPUT_EVENTS:
+                switch(variation) {
+                    case 1:
+                        rec.setValue(new Boolean(((data[0] & 0b10000000) != 0)).toString());
+                        break;
+                    case 2:
+                        rec.setValue(new Boolean(((data[0] & 0b10000000) != 0)).toString());
+                        //Has time
+                        rec.setTimestamp(DataObject.toLong(data, 1, 6));
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case COUNTER_STATIC:
+                //Counters
+                switch(variation) {
+                    case 1:
+                        //32 bits w/ flag
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 4)).toString());
+                        break;
+                    case 2:
+                        //16 bits w/ flag
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 2)).toString());
+                        break;
+                    case 3:
+                        //32 bits w/ flag
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 4)).toString());
+                        break;
+                    case 4:
+                        //16 bits w/ flag
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 2)).toString());
+                        break;
+                    case 5:
+                        //32 bits
+                        rec.setValue(new Long(DataObject.toLong(data, 0, 4)).toString());
+                        break;
+                    case 6:
+                        //16 bits
+                        rec.setValue(new Long(DataObject.toLong(data, 0, 2)).toString());
+                        break;
+                    case 7:
+                        //32 bits
+                        rec.setValue(new Long(DataObject.toLong(data, 0, 4)).toString());
+                        break;
+                    case 8:
+                        //16 bits
+                        rec.setValue(new Long(DataObject.toLong(data, 0, 2)).toString());
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case FROZEN_COUNTER:
+                //Frozen Counters
+                switch(variation) {
+                    case 1:
+                        //32 bits w/ flag
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 4)).toString());
+                        break;
+                    case 2:
+                        //16 bits w/ flag
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 2)).toString());
+                        break;
+                    case 3:
+                        //32 bits w/ flag
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 4)).toString());
+                        break;
+                    case 4:
+                        //16 bits w/ flag
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 2)).toString());
+                        break;
+                    case 5:
+                        //32 bits w/ flag and time
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 4)).toString());
+                        rec.setTimestamp(DataObject.toLong(data, 5, 6));
+                        break;
+                    case 6:
+                        //16 bits w/ flag and time
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 2)).toString());
+                        rec.setTimestamp(DataObject.toLong(data, 3, 6));
+                        break;
+                    case 7:
+                        //32 bits w/ flag and time
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 4)).toString());
+                        rec.setTimestamp(DataObject.toLong(data, 5, 6));
+                        break;
+                    case 8:
+                        //16 bits w/ flag and time
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 2)).toString());
+                        rec.setTimestamp(DataObject.toLong(data, 3, 6));
+                        break;
+                    case 9:
+                        //32 bits
+                        rec.setValue(new Long(DataObject.toLong(data, 0, 4)).toString());
+                        break;
+                    case 10:
+                        //16 bits
+                        rec.setValue(new Long(DataObject.toLong(data, 0, 2)).toString());
+                        break;
+                    case 11:
+                        //32 bits
+                        rec.setValue(new Long(DataObject.toLong(data, 0, 4)).toString());
+                        break;
+                    case 12:
+                        //16 bits
+                        rec.setValue(new Long(DataObject.toLong(data, 0, 2)).toString());
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case COUNTER_EVENTS:
+                //Counter events
+                switch(variation) {
+                    case 1:
+                        //32 bits w/ flag
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 4)).toString());
+                        break;
+                    case 2:
+                        //16 bits w/ flag
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 2)).toString());
+                        break;
+                    case 3:
+                        //32 bits w/ flag
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 4)).toString());
+                        break;
+                    case 4:
+                        //16 bits w/ flag
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 2)).toString());
+                        break;
+                    case 5:
+                        //32 bits w/ flag and time
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 4)).toString());
+                        rec.setTimestamp(DataObject.toLong(data, 5, 6));
+                        break;
+                    case 6:
+                        //16 bits w/ flag and time
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 2)).toString());
+                        rec.setTimestamp(DataObject.toLong(data, 3, 6));
+                        break;
+                    case 7:
+                        //32 bits w/ flag and time
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 4)).toString());
+                        rec.setTimestamp(DataObject.toLong(data, 5, 6));
+                        break;
+                    case 8:
+                        //16 bits w/ flag and time
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 2)).toString());
+                        rec.setTimestamp(DataObject.toLong(data, 3, 6));
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case FROZEN_COUNTER_EVENTS:
+                //Frozen Counter events
+                switch(variation) {
+                    case 1:
+                        //32 bits w/ flag
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 4)).toString());
+                        break;
+                    case 2:
+                        //16 bits w/ flag
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 2)).toString());
+                        break;
+                    case 3:
+                        //32 bits w/ flag
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 4)).toString());
+                        break;
+                    case 4:
+                        //16 bits w/ flag
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 2)).toString());
+                        break;
+                    case 5:
+                        //32 bits w/ flag and time
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 4)).toString());
+                        rec.setTimestamp(DataObject.toLong(data, 5, 6));
+                        break;
+                    case 6:
+                        //16 bits w/ flag and time
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 2)).toString());
+                        rec.setTimestamp(DataObject.toLong(data, 3, 6));
+                        break;
+                    case 7:
+                        //32 bits w/ flag and time
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 4)).toString());
+                        rec.setTimestamp(DataObject.toLong(data, 5, 6));
+                        break;
+                    case 8:
+                        //16 bits w/ flag and time
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 2)).toString());
+                        rec.setTimestamp(DataObject.toLong(data, 3, 6));
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case ANALOG_INPUT_STATIC:
+                //Analog Inputs
+                switch(variation) {
+                    case 1:
+                        //32 bits w/ flag
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 4)).toString());
+                        break;
+                    case 2:
+                        //16 bits w/ flag
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 2)).toString());
+                        break;
+                    case 3:
+                        //32 bits
+                        rec.setValue(new Long(DataObject.toLong(data, 0, 4)).toString());
+                        break;
+                    case 4:
+                        //16 bits
+                        rec.setValue(new Long(DataObject.toLong(data, 0, 2)).toString());
+                        break;
+                    case 5:
+                        //32 bit floating point w/ flag
+                        rec.setValue(new Float(DataObject.toFloat(data, 1, 4)).toString());
+                        break;
+                    case 6:
+                        //64 bit floating point w/ flag
+                        rec.setValue(new Float(DataObject.toFloat(data, 1, 8)).toString());
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case FROZEN_ANALOG_INPUT:
+                //Frozen analog Inputs
+                switch(variation) {
+                    case 1:
+                        //32 bits w/ flag
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 4)).toString());
+                        break;
+                    case 2:
+                        //16 bits w/ flag
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 2)).toString());
+                        break;
+                    case 3:
+                        //32 bits w/ flag and time
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 4)).toString());
+                        rec.setTimestamp(DataObject.toLong(data, 5, 6));
+                        break;
+                    case 4:
+                        //16 bits w/ flag and time
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 2)).toString());
+                        rec.setTimestamp(DataObject.toLong(data, 3, 6));
+                        break;
+                    case 5:
+                        //32 bits
+                        rec.setValue(new Long(DataObject.toLong(data, 0, 4)).toString());
+                        break;
+                    case 6:
+                        //16 bits
+                        rec.setValue(new Long(DataObject.toLong(data, 0, 2)).toString());
+                        break;
+                    case 7:
+                        //32 bit floating point w/ flag
+                        rec.setValue(new Float(DataObject.toFloat(data, 1, 4)).toString());
+                        break;
+                    case 8:
+                        //64 bit floating point w/ flag
+                        rec.setValue(new Float(DataObject.toFloat(data, 1, 8)).toString());
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case ANALOG_INPUT_EVENTS:
+                //Analog Input Events
+                switch(variation) {
+                    case 1:
+                        //32 bits w/ flag
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 4)).toString());
+                        break;
+                    case 2:
+                        //16 bits w/ flag
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 2)).toString());
+                        break;
+                    case 3:
+                        //32 bits w/ flag and time
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 4)).toString());
+                        rec.setTimestamp(DataObject.toLong(data, 5, 6));
+                        break;
+                    case 4:
+                        //16 bits w/ flag and time
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 2)).toString());
+                        rec.setTimestamp(DataObject.toLong(data, 3, 6));
+                        break;
+                    case 5:
+                        //32 bit floating point w/ flag
+                        rec.setValue(new Float(DataObject.toFloat(data, 1, 4)).toString());
+                        break;
+                    case 6:
+                        //64 bit floating point w/ flag
+                        rec.setValue(new Float(DataObject.toFloat(data, 1, 8)).toString());
+                        break;
+                    case 7:
+                        //32 bit floating point w/ flag and time
+                        rec.setValue(new Float(DataObject.toFloat(data, 1, 4)).toString());
+                        rec.setTimestamp(DataObject.toLong(data, 5, 6));
+                        break;
+                    case 8:
+                        //64 bit floating point w/ flag
+                        rec.setValue(new Float(DataObject.toFloat(data, 1, 8)).toString());
+                        rec.setTimestamp(DataObject.toLong(data, 9, 6));
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case FROZEN_ANALOG_INPUT_EVENTS:
+                //Frozen Analog Input Events
+                //Analog Input Events
+                switch(variation) {
+                    case 1:
+                        //32 bits w/ flag
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 4)).toString());
+                        break;
+                    case 2:
+                        //16 bits w/ flag
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 2)).toString());
+                        break;
+                    case 3:
+                        //32 bits w/ flag and time
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 4)).toString());
+                        rec.setTimestamp(DataObject.toLong(data, 5, 6));
+                        break;
+                    case 4:
+                        //16 bits w/ flag and time
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 2)).toString());
+                        rec.setTimestamp(DataObject.toLong(data, 3, 6));
+                        break;
+                    case 5:
+                        //32 bit floating point w/ flag
+                        rec.setValue(new Float(DataObject.toFloat(data, 1, 4)).toString());
+                        break;
+                    case 6:
+                        //64 bit floating point w/ flag
+                        rec.setValue(new Float(DataObject.toFloat(data, 1, 8)).toString());
+                        break;
+                    case 7:
+                        //32 bit floating point w/ flag and time
+                        rec.setValue(new Float(DataObject.toFloat(data, 1, 4)).toString());
+                        rec.setTimestamp(DataObject.toLong(data, 5, 6));
+                        break;
+                    case 8:
+                        //64 bit floating point w/ flag
+                        rec.setValue(new Float(DataObject.toFloat(data, 1, 8)).toString());
+                        rec.setTimestamp(DataObject.toLong(data, 9, 6));
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case ANALOG_INPUT_REPORTING_DEADBAND:
+                //Analog Input Reporting Deadband
+                switch(variation) {
+                    case 1:
+                        //16 bits
+                        rec.setValue(new Long(DataObject.toLong(data, 0, 2)).toString());
+                        break;
+                    case 2:
+                        //32 bits
+                        rec.setValue(new Long(DataObject.toLong(data, 0, 4)).toString());
+                        break;
+                    case 3:
+                        //32 bit floating point
+                        rec.setValue(new Float(DataObject.toFloat(data, 0, 4)).toString());
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case ANALOG_OUTPUT_STATIC:
+                //Analog output status
+                switch(variation) {
+                    case 1:
+                        //32 bits w/ flag
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 4)).toString());
+                        break;
+                    case 2:
+                        //16 bits w/ flag
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 2)).toString());
+                        break;
+                    case 3:
+                        //32 bit floating point w/ flag
+                        rec.setValue(new Float(DataObject.toFloat(data, 1, 4)).toString());
+                        break;
+                    case 4:
+                        //64 bit floating point w/ flag
+                        rec.setValue(new Float(DataObject.toFloat(data, 1, 8)).toString());
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case ANALOG_OUTPUT_EVENTS:
+                //Analog output events
+                switch(variation) {
+                    case 1:
+                        //32 bits w/ flag
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 4)).toString());
+                        break;
+                    case 2:
+                        //16 bits w/ flag
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 2)).toString());
+                        break;
+                    case 3:
+                        //32 bits w/ flag and time
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 4)).toString());
+                        rec.setTimestamp(DataObject.toLong(data, 5, 6));
+                        break;
+                    case 4:
+                        //16 bits w/ flag and time
+                        rec.setValue(new Long(DataObject.toLong(data, 1, 2)).toString());
+                        rec.setTimestamp(DataObject.toLong(data, 3, 6));
+                        break;
+                    case 5:
+                        //32 bit floating point w/ flag
+                        rec.setValue(new Float(DataObject.toFloat(data, 1, 4)).toString());
+                        break;
+                    case 6:
+                        //64 bit floating point w/ flag
+                        rec.setValue(new Float(DataObject.toFloat(data, 1, 8)).toString());
+                        break;
+                    case 7:
+                        //32 bit floating point w/ flag and time
+                        rec.setValue(new Float(DataObject.toFloat(data, 1, 4)).toString());
+                        rec.setTimestamp(DataObject.toLong(data, 5, 6));
+                        break;
+                    case 8:
+                        //64 bit floating point w/ flag
+                        rec.setValue(new Float(DataObject.toFloat(data, 1, 8)).toString());
+                        rec.setTimestamp(DataObject.toLong(data, 9, 6));
+                        break;
+                    default:
+                        break;
+                }
+            default:break;
+        }
+
         if (user.getDatabase() != null)
             user.getDatabase().writeRecord(rec);
-        // elem.writeNewRecord(rec);
+
         if (DEBUG) {
             System.out.println("[DataMap " + this + "] Set : (G,V,I, value) " + group
                     + " variation:" + variation + " index: " + index);
