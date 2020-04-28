@@ -456,6 +456,13 @@ public class DataObject implements InitFeatures, DataMapFeatures {
         return val;
     }
 
+    public static final float toFloat(byte[] byteArray, int offset, int length) {
+        // Convert to IEEE Float
+        ByteBuffer b = ByteBuffer.wrap(Arrays.copyOfRange(byteArray, offset, offset + length))
+                .order(ByteOrder.LITTLE_ENDIAN);
+        return b.getFloat();
+    }
+
     /**
      * Format CurrentTime to a 6 dnp3-formatted bytes
      *
