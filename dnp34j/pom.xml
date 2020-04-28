@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.infiniteautomation</groupId>
     <artifactId>dnp34j</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>2.0.0-SNAPSHOT</version>
     <name>dnp34j Library</name>
     <build>
         <sourceDirectory>src</sourceDirectory>

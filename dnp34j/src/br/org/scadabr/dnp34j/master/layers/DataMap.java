@@ -7,6 +7,7 @@
  */
 package br.org.scadabr.dnp34j.master.layers;
 
+import br.org.scadabr.dnp34j.master.common.DataLengths;
 import br.org.scadabr.dnp34j.master.common.DataMapFeatures;
 import br.org.scadabr.dnp34j.master.common.DataObject;
 import br.org.scadabr.dnp34j.master.common.InitFeatures;
@@ -63,11 +64,6 @@ public class DataMap implements DataMapFeatures, InitFeatures {
         return getData.readBytes();
     }
 
-    // public void set(byte group, byte variation, byte[] dataObjects) {
-    // set(group, variation, getIndexMin(group), getIndexMax(group),
-    // dataObjects);
-    // }
-
     /**
      * Set objects of a group/variation. Return a copy of data joined in the request Range :
      * [index[start], index[start+1], ... ,index[stop]]
@@ -81,11 +77,11 @@ public class DataMap implements DataMapFeatures, InitFeatures {
      * @return a range of Data Objects
      */
     public void set(byte group, byte variation, int start, int stop, byte[] newDataObjects) {
-        if (DataObject.length(group, variation) < 0) {
+        if (DataLengths.getDataLength(group, variation) < 0) {
             return;
         }
 
-        if (DataObject.length(group, variation) == 1) {
+        if (DataLengths.getDataLength(group, variation) == 1) {
             setBits(group, variation, start, stop, newDataObjects);
         } else {
             setBytes(group, variation, start, stop, newDataObjects);
@@ -137,7 +133,7 @@ public class DataMap implements DataMapFeatures, InitFeatures {
      * @return a range of Data Objects
      */
     private void setBytes(byte group, byte variation, int start, int stop, byte[] newDataObjects) {
-        int length = (DataObject.length(group, variation) + 7) / 8;
+        int length = (DataLengths.getDataLength(group, variation) + 7) / 8;
 
         byte[] newDO = new byte[length];
 
@@ -193,7 +189,7 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                         break;
                 }
                 break;
-            case BINARY_INPUT_EVENTS:
+            case BINARY_INPUT_EVENT:
                 switch(variation) {
                     case 1:
                         rec.setValue(new Boolean(((data[0] & 0b10000000) != 0)).toString());
@@ -221,7 +217,7 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                         break;
                 }
                 break;
-            case BINARY_OUTPUT_EVENTS:
+            case BINARY_OUTPUT_EVENT:
                 switch(variation) {
                     case 1:
                         rec.setValue(new Boolean(((data[0] & 0b10000000) != 0)).toString());
@@ -333,7 +329,7 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                         break;
                 }
                 break;
-            case COUNTER_EVENTS:
+            case COUNTER_EVENT:
                 //Counter events
                 switch(variation) {
                     case 1:
@@ -376,7 +372,7 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                         break;
                 }
                 break;
-            case FROZEN_COUNTER_EVENTS:
+            case FROZEN_COUNTER_EVENT:
                 //Frozen Counter events
                 switch(variation) {
                     case 1:
@@ -491,7 +487,7 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                         break;
                 }
                 break;
-            case ANALOG_INPUT_EVENTS:
+            case ANALOG_INPUT_EVENT:
                 //Analog Input Events
                 switch(variation) {
                     case 1:
@@ -526,7 +522,7 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                         rec.setTimestamp(DataObject.toLong(data, 5, 6));
                         break;
                     case 8:
-                        //64 bit floating point w/ flag
+                        //64 bit floating point w/ flag and time
                         rec.setValue(new Float(DataObject.toFloat(data, 1, 8)).toString());
                         rec.setTimestamp(DataObject.toLong(data, 9, 6));
                         break;
@@ -534,7 +530,7 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                         break;
                 }
                 break;
-            case FROZEN_ANALOG_INPUT_EVENTS:
+            case FROZEN_ANALOG_INPUT_EVENT:
                 //Frozen Analog Input Events
                 //Analog Input Events
                 switch(variation) {
@@ -570,7 +566,7 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                         rec.setTimestamp(DataObject.toLong(data, 5, 6));
                         break;
                     case 8:
-                        //64 bit floating point w/ flag
+                        //64 bit floating point w/ flag and time
                         rec.setValue(new Float(DataObject.toFloat(data, 1, 8)).toString());
                         rec.setTimestamp(DataObject.toLong(data, 9, 6));
                         break;

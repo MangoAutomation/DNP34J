@@ -85,7 +85,7 @@ public class DataElement implements DataMapFeatures {
                     default:
                         return false;
                 }
-            case BINARY_INPUT_EVENTS:
+            case BINARY_INPUT_EVENT:
                 //Binary input events
                 switch(variation) {
                     case 1:
@@ -104,7 +104,7 @@ public class DataElement implements DataMapFeatures {
                     default:
                         return false;
                 }
-            case BINARY_OUTPUT_EVENTS:
+            case BINARY_OUTPUT_EVENT:
                 //Binary output events
                 switch(variation) {
                     case 1:
@@ -148,7 +148,7 @@ public class DataElement implements DataMapFeatures {
                     default:
                         return false;
                 }
-            case COUNTER_EVENTS:
+            case COUNTER_EVENT:
                 //Counter events
                 switch(variation) {
                     case 1:
@@ -163,7 +163,7 @@ public class DataElement implements DataMapFeatures {
                     default:
                         return false;
                 }
-            case FROZEN_COUNTER_EVENTS:
+            case FROZEN_COUNTER_EVENT:
                 //Frozen Counter events
                 switch(variation) {
                     case 1:
@@ -206,7 +206,7 @@ public class DataElement implements DataMapFeatures {
                     default:
                         return false;
                 }
-            case ANALOG_INPUT_EVENTS:
+            case ANALOG_INPUT_EVENT:
                 //Analog Input Events
                 switch(variation) {
                     case 1:
@@ -221,7 +221,7 @@ public class DataElement implements DataMapFeatures {
                     default:
                         return false;
                 }
-            case FROZEN_ANALOG_INPUT_EVENTS:
+            case FROZEN_ANALOG_INPUT_EVENT:
                 //Frozen Analog Input Events
                 switch(variation) {
                     case 1:

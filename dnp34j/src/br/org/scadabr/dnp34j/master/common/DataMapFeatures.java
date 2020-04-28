@@ -156,14 +156,14 @@ public interface DataMapFeatures {
      */
     public byte BINARY_INPUT_STATIC = (byte) 1;
 
-    public byte BINARY_INPUT_EVENTS = (byte) 2;
+    public byte BINARY_INPUT_EVENT = (byte) 2;
 
     /**
      * Group used by Binary Output static Objects
      */
     public byte BINARY_OUTPUT_STATIC = (byte) 10;
 
-    public byte BINARY_OUTPUT_EVENTS = (byte) 11;
+    public byte BINARY_OUTPUT_EVENT = (byte) 11;
 
     /**
      * Group used by Counter static Objects
@@ -172,9 +172,9 @@ public interface DataMapFeatures {
 
     public byte FROZEN_COUNTER = (byte) 21;
 
-    public byte COUNTER_EVENTS = (byte) 22;
+    public byte COUNTER_EVENT = (byte) 22;
 
-    public byte FROZEN_COUNTER_EVENTS = (byte) 23;
+    public byte FROZEN_COUNTER_EVENT = (byte) 23;
 
     /**
      * Group used by Analog Input static Objects
@@ -183,9 +183,9 @@ public interface DataMapFeatures {
 
     public byte FROZEN_ANALOG_INPUT = (byte) 31;
 
-    public byte ANALOG_INPUT_EVENTS = (byte) 32;
+    public byte ANALOG_INPUT_EVENT = (byte) 32;
 
-    public byte FROZEN_ANALOG_INPUT_EVENTS = (byte) 33;
+    public byte FROZEN_ANALOG_INPUT_EVENT = (byte) 33;
 
     public byte ANALOG_INPUT_REPORTING_DEADBAND = (byte) 34;
 
@@ -212,21 +212,6 @@ public interface DataMapFeatures {
     public byte IIN_STATIC = (byte) 80;
 
     /**
-     * Group used by Binary Input events Objects
-     */
-    public byte BINARY_INPUT_EVENT = (byte) 2; // Group used by Binary Input events Objects
-
-    /**
-     * Group used by Counter events Objects
-     */
-    public byte COUNTER_EVENT = (byte) 22;
-
-    /**
-     * Group used by Analog Input events Objects
-     */
-    public byte ANALOG_INPUT_EVENT = (byte) 32;
-
-    /**
      * Group used by Binary Output commands Objects
      */
     public byte BINARY_OUTPUT_COMMAND = (byte) 12;
@@ -240,6 +225,11 @@ public interface DataMapFeatures {
      * Group used by Time commands Objects
      */
     public byte TIME_COMMAND = (byte) 50;
+
+    /**
+     * Group used by time of occurance
+     */
+    public byte TIME_OCCURANCE = (byte) 51;
 
     /**
      * Group used by Time Delays Objects

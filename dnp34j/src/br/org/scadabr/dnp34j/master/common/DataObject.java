@@ -22,103 +22,6 @@ import br.org.scadabr.dnp34j.master.common.utils.Utils;
 public class DataObject implements InitFeatures, DataMapFeatures {
     static final boolean DEBUG = !DATABASE_QUIET;
 
-    // =============================================================================
-    // Attributes
-    // =============================================================================
-
-    /**
-     * Size (bits) of each data object supported Variation V is in V-1 case of the array Intended to
-     * be used with length() method
-     */
-
-    // static byte[][][] size =
-    // {
-    // { null, { 1, 8 }, { 8, 56, -5 } },
-    //
-    // { { 1, 8 }, null, { 88 } },
-    //
-    // { { 40, 24,0, 0, 32, 16 }, null, { 40, 24, 0, 0, 88, 72 } },
-    //
-    // { { 40, 24, 32, 16 }, null, { 40, 24, 88, 72 } },
-    //
-    // { { 40, 24 }, { 40, 24 } },
-    //
-    // { { 48 }, {-7}, { 16, 16 } },
-    //
-    // { { 0 } }, null, { { 1 } }
-    //
-    // };
-
-    static byte[][][] size = {{null, {1, // v01 : Bin Input
-        8}, // v02 : Bin Input with status
-        {8, // v01 : Bin Input Change
-            56 // v02 : Bin Input Change with time
-            , 24}}, // v03 : Bin Input Change with relative time
-
-            {{1, // v01 : Bin Output
-                8}, // v02 : Bin Output with status
-                null,
-
-                {88 // v01 : Control Relay Output Block
-                }},
-
-            {{40, // v01 : 32-Bit Bin Counter
-                24, // v02 : 16-Bit Bin Counter
-                0, 0, 32, // v05 : 32-Bit Counter without Flag
-                16}, // v06 : 16-Bit Counter without Flag
-                    {-40, -24, -40, -24, -88, -72, -88, -72, -32},
-
-                    {40, // v01 : 32-Bit Counter Change without time
-                        24, // v02 : 16-Bit Counter Change without time
-                        0, 0, 88, // v05 : 32-Bit Counter Change with time
-                        72}},
-            //Group 30
-            {{40, // v01 : 32-Bit Ana Input
-                24, // v02 : 16-Bit Ana Input
-                32, // v03 : 32-Bit Ana Input without Flag
-                16, // v04 : 16-Bit Ana Input without Flag
-                40}, // v05 : 32-Bit Floating Point Ana Input with Flag
-                            //Group 31 (Experimental support for frozen analog input)
-                            {40, // v01 : 32-Bit Ana Change Event without Time
-                    24, // v02 : 16-Bit Ana Change Event without Time
-                    88, // v03 : 32-Bit Ana Change Event with Time
-                    72, // v04 ??
-                    -1, // v05 ??
-                    -1, // v06 ??
-                    88 // v07 : 32-Bit Floating Point Change Event with Time
-                            },
-                            //Group 32
-                            {40, // v01 : 32-Bit Ana Change Event without Time
-                                24, // v02 : 16-Bit Ana Change Event without Time
-                                88, // v03 : 32-Bit Ana Change Event with Time
-                                72, // v04 ??
-                                -1, // v05 ??
-                                -1, // v06 ??
-                                88 // v07 : 32-Bit Floating Point Change Event with Time
-                            }},
-
-            {{40, // v01 : 32-Bit Ana Output Status with flag
-                24, // v02 : 16-Bit Ana Output Status with flag
-                40}, //v03 : 32 bit Floating point Ana Output Status with flag
-                                {40, // v01 : 32-Bit Ana Output Block
-                    24 // v02 : 16-Bit Ana Output Block
-                                }},
-
-            {{48}, // v01 : Time and Date
-                                    {-48},
-
-                                    {16, // v01 : Time Delay Coarse
-                                        16 // v02 : Time Delay Fine
-                                    }},
-
-            {{0 // v 01 : doesn't carry any information in itself
-            }},
-
-            null,
-
-            {{1 // v 01 : Internal Indications
-            }}};
-
     /**
      * Object group
      */
@@ -199,7 +102,7 @@ public class DataObject implements InitFeatures, DataMapFeatures {
             throw new IllegalArgumentException("Unknown Data Object");
         }
 
-        if (((length(g, v) + 7) / 8) != someBytes.length) {
+        if (((DataLengths.getDataLength(g, v) + 7) / 8) != someBytes.length) {
             throw new IllegalArgumentException("Frame length (" + someBytes.length
                     + ") doesn't match with this DataObject (" + g + ", " + v + ")");
         }
@@ -214,47 +117,6 @@ public class DataObject implements InitFeatures, DataMapFeatures {
     // =============================================================================
 
     /**
-     * DataObject length. This method is called when group and length are coded in decimal format
-     *
-     * @param g Object group
-     * @param v Object variation
-     *
-     * @return object size, <tt>0</tt> if there's no object coding, <tt>-1</tt> if this object is
-     *         not supported
-     */
-    public static byte length(byte g, byte v) {
-        return fixedLength(Utils.decimal2Hexa(g), v);
-    }
-
-    /**
-     * DataObject length. This method is called when group and length are coded in hexa format
-     *
-     * @param g Object group
-     * @param v Object variation
-     *
-     * @return object size, 0 if there's no object coding, -1 if this object is not supported
-     */
-    public static byte fixedLength(byte g, byte v) {
-        int first4bits = (g >> 4) & 0x0F;
-        int last4bits = g & 0x0F;
-        byte res;
-
-        // System.out.println("fixedLength() Group: " + g + " Variation: " + v);
-        // System.out.println("first4Bits: " + first4bits);
-        // System.out.println("last4Bits: " + last4bits);
-
-        // System.out.println("size[" + first4bits + "][" + last4bits + "]["
-        // + (v - 1) + "]");
-        try {
-            res = size[first4bits][last4bits][v - 1];
-        } catch (Exception e) {
-            res = -1;
-        }
-
-        return res;
-    }
-
-    /**
      * Verify if this object is include in DNP Object Table
      *
      * @param g Object group
@@ -263,7 +125,7 @@ public class DataObject implements InitFeatures, DataMapFeatures {
      * @return object is include in DNP Object Table
      */
     public static boolean isValid(byte g, byte v) {
-        return (length(g, v) != -1);
+        return (DataLengths.getDataLength(g, v) != -1);
     }
 
     /**
@@ -475,7 +337,7 @@ public class DataObject implements InitFeatures, DataMapFeatures {
             result[i] = (byte) ((time >> (8 * i)) & 0xFF);
         }
 
-        long i = setTime(result);
+        setTime(result);
 
         return result;
     }

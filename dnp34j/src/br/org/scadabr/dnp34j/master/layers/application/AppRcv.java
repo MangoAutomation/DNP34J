@@ -1,6 +1,7 @@
 package br.org.scadabr.dnp34j.master.layers.application;
 
 import br.org.scadabr.dnp34j.master.common.AppFeatures;
+import br.org.scadabr.dnp34j.master.common.DataLengths;
 import br.org.scadabr.dnp34j.master.common.DataMapFeatures;
 import br.org.scadabr.dnp34j.master.common.DataObject;
 import br.org.scadabr.dnp34j.master.common.InitFeatures;
@@ -32,7 +33,7 @@ import br.org.scadabr.dnp34j.master.session.config.DNPConfig;
  * </ul>
  * </ul>
  * </ul>
- * 
+ *
  * @author <a href="mailto:alexis.clerc@sysaware.com">Alexis CLERC</a>
  */
 public class AppRcv extends Thread implements AppFeatures, InitFeatures, DataMapFeatures {
@@ -70,7 +71,7 @@ public class AppRcv extends Thread implements AppFeatures, InitFeatures, DataMap
 
     /**
      * Constructor. Initialize the receive part of the application layer
-     * 
+     *
      * @throws Exception
      */
 
@@ -97,6 +98,7 @@ public class AppRcv extends Thread implements AppFeatures, InitFeatures, DataMap
     // =============================================================================
     // Methods
     // =============================================================================
+    @Override
     public void run() {
         try {
             while (!STOP) {
@@ -246,7 +248,7 @@ public class AppRcv extends Thread implements AppFeatures, InitFeatures, DataMap
             byte group = aFrame.readByte();
             byte variation = aFrame.readByte();
             byte qualField = aFrame.readByte();
-            int dataLength = DataObject.length(group, variation);
+            int dataLength = DataLengths.getDataLength(group, variation);
 
             if (dataLength < 0) {
                 discard = true;
@@ -259,123 +261,123 @@ public class AppRcv extends Thread implements AppFeatures, InitFeatures, DataMap
             }
             switch (qualField) {
 
-            case START_STOP_8: {
-                int start = Utils.byte2int(aFrame.readByte());
-                int stop = Utils.byte2int(aFrame.readByte());
-                int length = (((stop - start + 1) * Math.abs(dataLength)) + 7) / 8;
+                case START_STOP_8: {
+                    int start = Utils.byte2int(aFrame.readByte());
+                    int stop = Utils.byte2int(aFrame.readByte());
+                    int length = (((stop - start + 1) * Math.abs(dataLength)) + 7) / 8;
 
-                if (!discard) {
-                    dataMap.set(group, variation, start, stop, aFrame.readBytes(length));
-                }
-                else {
-                    aFrame.readBytes(length);
-                }
-
-            }
-
-                break;
-
-            case START_STOP_16: {
-                int start = (Utils.byte2int(aFrame.readByte()) + ((aFrame.readByte() << 8) & 0xFF00));
-                int stop = (Utils.byte2int(aFrame.readByte()) + ((aFrame.readByte() << 8) & 0xFF00));
-                int length = (((stop - start + 1) * Math.abs(dataLength)) + 7) / 8;
-                if (!discard) {
-                    dataMap.set(group, variation, start, stop, aFrame.readBytes(length));
-                }
-                else {
-                    aFrame.readBytes(length);
-                }
-
-            }
-
-                break;
-
-            case ALL_POINTS: {
-                // int length = ((dataMap.getIndexMax(group) * Math
-                // .abs(dataLength)) + 7) / 8;
-                // if (!discard) {
-                // // dataMap.set(group, variation, aFrame.readBytes(length));
-                // } else {
-                // aFrame.readBytes(length);
-                // }
-
-            }
-
-                break;
-
-            case QUANTITY_8: {
-                int quantity = Utils.byte2int(aFrame.readByte());
-                int length = ((quantity * Math.abs(dataLength)) + 7) / 8;
-
-                if (!discard) {
-                    dataMap.set(group, variation, 0, quantity - 1, aFrame.readBytes(length));
-                }
-                else {
-                    aFrame.readBytes(length);
-                }
-            }
-
-                break;
-
-            case QUANTITY_16: {
-                int quantity = (Utils.byte2int(aFrame.readByte()) + ((aFrame.readByte() << 8) & 0xFF00));
-                int length = ((quantity * Math.abs(dataLength)) + 7) / 8;
-
-                if (!discard) {
-                    dataMap.set(group, variation, 0, quantity - 1, aFrame.readBytes(length));
-                }
-                else {
-                    aFrame.readBytes(length);
-                }
-
-            }
-
-                break;
-
-            case INDEXES_8: {
-                int[] values = new int[aFrame.readByte()];
-                DataObject[] dataObjects = new DataObject[values.length];
-
-                if (!discard) {
-                    for (int i = 0; i < values.length; i++) {
-                        values[i] = Utils.byte2int(aFrame.readByte());
-
-                        int length = (dataLength + 7) / 8;
-                        dataObjects[i] = new DataObject(group, variation, aFrame.readBytes(length));
+                    if (!discard) {
+                        dataMap.set(group, variation, start, stop, aFrame.readBytes(length));
+                    }
+                    else {
+                        aFrame.readBytes(length);
                     }
 
-                    dataMap.set(group, variation, values, dataObjects, qualField);
                 }
-                else {
-                    dataLength *= -1;
-                    int numBytes = (dataLength / 8) * values.length + values.length;
-                    aFrame.readBytes(numBytes);
-                }
-            }
 
                 break;
 
-            case INDEXES_16: {
-                int[] values = new int[(Utils.byte2int(aFrame.readByte()) + ((aFrame.readByte() << 8) & 0xFF00))];
-                DataObject[] dataObjects = new DataObject[values.length];
-
-                if (!discard) {
-                    for (int i = 0; i < values.length; i++) {
-                        values[i] = (Utils.byte2int(aFrame.readByte()) + ((aFrame.readByte() << 8) & 0xFF00));
-
-                        int length = (dataLength + 7) / 8;
-                        dataObjects[i] = new DataObject(group, variation, aFrame.readBytes(length));
+                case START_STOP_16: {
+                    int start = (Utils.byte2int(aFrame.readByte()) + ((aFrame.readByte() << 8) & 0xFF00));
+                    int stop = (Utils.byte2int(aFrame.readByte()) + ((aFrame.readByte() << 8) & 0xFF00));
+                    int length = (((stop - start + 1) * Math.abs(dataLength)) + 7) / 8;
+                    if (!discard) {
+                        dataMap.set(group, variation, start, stop, aFrame.readBytes(length));
+                    }
+                    else {
+                        aFrame.readBytes(length);
                     }
 
-                    dataMap.set(group, variation, values, dataObjects, qualField);
-                }
-                else {
-                    dataLength *= -1;
-                    int numBytes = (dataLength / 8) * values.length + values.length * 2;
-                    aFrame.readBytes(numBytes);
                 }
 
-            }
+                break;
+
+                case ALL_POINTS: {
+                    // int length = ((dataMap.getIndexMax(group) * Math
+                    // .abs(dataLength)) + 7) / 8;
+                    // if (!discard) {
+                    // // dataMap.set(group, variation, aFrame.readBytes(length));
+                    // } else {
+                    // aFrame.readBytes(length);
+                    // }
+
+                }
+
+                break;
+
+                case QUANTITY_8: {
+                    int quantity = Utils.byte2int(aFrame.readByte());
+                    int length = ((quantity * Math.abs(dataLength)) + 7) / 8;
+
+                    if (!discard) {
+                        dataMap.set(group, variation, 0, quantity - 1, aFrame.readBytes(length));
+                    }
+                    else {
+                        aFrame.readBytes(length);
+                    }
+                }
+
+                break;
+
+                case QUANTITY_16: {
+                    int quantity = (Utils.byte2int(aFrame.readByte()) + ((aFrame.readByte() << 8) & 0xFF00));
+                    int length = ((quantity * Math.abs(dataLength)) + 7) / 8;
+
+                    if (!discard) {
+                        dataMap.set(group, variation, 0, quantity - 1, aFrame.readBytes(length));
+                    }
+                    else {
+                        aFrame.readBytes(length);
+                    }
+
+                }
+
+                break;
+
+                case INDEXES_8: {
+                    int[] values = new int[aFrame.readByte()];
+                    DataObject[] dataObjects = new DataObject[values.length];
+
+                    if (!discard) {
+                        for (int i = 0; i < values.length; i++) {
+                            values[i] = Utils.byte2int(aFrame.readByte());
+
+                            int length = (dataLength + 7) / 8;
+                            dataObjects[i] = new DataObject(group, variation, aFrame.readBytes(length));
+                        }
+
+                        dataMap.set(group, variation, values, dataObjects, qualField);
+                    }
+                    else {
+                        dataLength *= -1;
+                        int numBytes = (dataLength / 8) * values.length + values.length;
+                        aFrame.readBytes(numBytes);
+                    }
+                }
+
+                break;
+
+                case INDEXES_16: {
+                    int[] values = new int[(Utils.byte2int(aFrame.readByte()) + ((aFrame.readByte() << 8) & 0xFF00))];
+                    DataObject[] dataObjects = new DataObject[values.length];
+
+                    if (!discard) {
+                        for (int i = 0; i < values.length; i++) {
+                            values[i] = (Utils.byte2int(aFrame.readByte()) + ((aFrame.readByte() << 8) & 0xFF00));
+
+                            int length = (dataLength + 7) / 8;
+                            dataObjects[i] = new DataObject(group, variation, aFrame.readBytes(length));
+                        }
+
+                        dataMap.set(group, variation, values, dataObjects, qualField);
+                    }
+                    else {
+                        dataLength *= -1;
+                        int numBytes = (dataLength / 8) * values.length + values.length * 2;
+                        aFrame.readBytes(numBytes);
+                    }
+
+                }
             }
 
         }
