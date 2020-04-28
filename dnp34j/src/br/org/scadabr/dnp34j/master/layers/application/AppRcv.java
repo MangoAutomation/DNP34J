@@ -250,15 +250,11 @@ public class AppRcv extends Thread implements AppFeatures, InitFeatures, DataMap
             byte qualField = aFrame.readByte();
             int dataLength = DataLengths.getDataLength(group, variation);
 
-            if (dataLength < 0) {
-                discard = true;
-                System.out.println("Group: " + group + " Variation: " + variation + " dataLength: " + dataLength);
-            }
-
             // nao suportada e nao descartavel!
             if (dataLength == -1) {
-                throw new Exception("Invalid Application frame received!");
+                throw new Exception("Invalid Application frame received for Group: " + group + " Variation: " + variation);
             }
+
             switch (qualField) {
 
                 case START_STOP_8: {
