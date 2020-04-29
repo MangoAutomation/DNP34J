@@ -68,6 +68,16 @@ public class DataLengths implements DataMapFeatures {
                         break;
                 }
                 break;
+            case BINARY_OUTPUT_COMMAND:
+                switch(variation) {
+                    case 1:
+                        return 72;
+                    case 2:
+                        return 72;
+                    default:
+                        break;
+                }
+                break;
             case COUNTER_STATIC:
                 //Counters
                 switch(variation) {
@@ -387,6 +397,23 @@ public class DataLengths implements DataMapFeatures {
                         return 112;
                     default:
                         break;
+                }
+                break;
+            case ANALOG_OUTPUT_COMMAND:
+                //Analog output events
+                switch(variation) {
+                    case 1:
+                        //32 bit int with control status
+                        return 40;
+                    case 2:
+                        //24 bit int with control status
+                        return 16;
+                    case 3:
+                        //32 bit float with control status
+                        return 40;
+                    case 4:
+                        //64 bit float with control status
+                        return 72;
                 }
                 break;
             case TIME_STATIC:
