@@ -2,6 +2,7 @@ package br.org.scadabr.dnp34j.master.session;
 
 import br.org.scadabr.dnp34j.master.common.AppFeatures;
 import br.org.scadabr.dnp34j.master.common.DataMapFeatures;
+import br.org.scadabr.dnp34j.master.common.DataObject;
 import br.org.scadabr.dnp34j.master.common.InitFeatures;
 import br.org.scadabr.dnp34j.master.common.utils.Buffer;
 import br.org.scadabr.dnp34j.master.common.utils.Lock;
@@ -110,7 +111,7 @@ public class DNPUser implements InitFeatures, DataMapFeatures, AppFeatures {
         Buffer commandFrame = appSnd.buildRequestMsg(operateMode, ANALOG_OUTPUT_COMMAND, (byte) 2,
                 new int[] {index}, WITH_DATA);
 
-        byte[] valueOnBytes = toBytes(value, 2);
+        byte[] valueOnBytes = DataObject.toBytes(value, 2);
         commandFrame.setMarker(7);
         commandFrame.writeByte(valueOnBytes[0]);
         commandFrame.setMarker(8);
@@ -124,15 +125,12 @@ public class DNPUser implements InitFeatures, DataMapFeatures, AppFeatures {
             int timeOn, int timeOff) {
         Buffer commandFrame = appSnd.buildRequestMsg(operateMode, BINARY_OUTPUT_COMMAND, (byte) 1,
                 new int[] {index}, WITH_DATA);
-        // int previous_marker = commandFrame.length();
 
-        commandFrame.writeByte(toBytes(index, 1)[0]);
+        commandFrame.writeByte(DataObject.toBytes(index, 1)[0]);
         commandFrame.setMarker(7);
         commandFrame.writeByte(controlCode);
 
-        // commandFrame.setMarker(previous_marker);
-
-        byte[] timeOnBytes = toBytes(timeOn, 4);
+        byte[] timeOnBytes = DataObject.toBytes(timeOn, 4);
         commandFrame.setMarker(9);
         commandFrame.writeByte(timeOnBytes[0]);
         commandFrame.setMarker(10);
@@ -142,7 +140,7 @@ public class DNPUser implements InitFeatures, DataMapFeatures, AppFeatures {
         commandFrame.setMarker(12);
         commandFrame.writeByte(timeOnBytes[3]);
 
-        byte[] timeOffBytes = toBytes(timeOff, 4);
+        byte[] timeOffBytes = DataObject.toBytes(timeOff, 4);
 
         commandFrame.setMarker(13);
         commandFrame.writeByte(timeOffBytes[0]);
@@ -153,7 +151,6 @@ public class DNPUser implements InitFeatures, DataMapFeatures, AppFeatures {
         commandFrame.setMarker(16);
         commandFrame.writeByte(timeOffBytes[3]);
         commandFrame.writeByte((byte) 0x00);
-        // commandFrame.setMarker(previous_marker);
 
         return commandFrame;
     }
@@ -166,15 +163,6 @@ public class DNPUser implements InitFeatures, DataMapFeatures, AppFeatures {
         appRcv.setSTOP(true);
         lnkRcv.setSTOP(true);
         phyLayer.close();
-    }
-
-    private byte[] toBytes(int value, int size) {
-        byte[] result = new byte[size];
-
-        for (int i = 0; i < result.length; i++) {
-            result[i] = (byte) ((value >> (8 * i)) & 0xFF);
-        }
-        return result;
     }
 
     private boolean resetLink(long timeout) throws Exception {

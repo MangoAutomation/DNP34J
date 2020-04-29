@@ -436,11 +436,11 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                         break;
                     case 5:
                         //32 bit floating point w/ flag
-                        rec.setValue(new Float(DataObject.toFloat(data, 1, 4)).toString());
+                        rec.setValue(new Float(DataObject.toFloat(data, 1)).toString());
                         break;
                     case 6:
                         //64 bit floating point w/ flag
-                        rec.setValue(new Float(DataObject.toFloat(data, 1, 8)).toString());
+                        rec.setValue(new Double(DataObject.toDouble(data, 1)).toString());
                         break;
                     default:
                         break;
@@ -477,11 +477,11 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                         break;
                     case 7:
                         //32 bit floating point w/ flag
-                        rec.setValue(new Float(DataObject.toFloat(data, 1, 4)).toString());
+                        rec.setValue(new Float(DataObject.toFloat(data, 1)).toString());
                         break;
                     case 8:
                         //64 bit floating point w/ flag
-                        rec.setValue(new Float(DataObject.toFloat(data, 1, 8)).toString());
+                        rec.setValue(new Double(DataObject.toDouble(data, 1)).toString());
                         break;
                     default:
                         break;
@@ -510,20 +510,20 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                         break;
                     case 5:
                         //32 bit floating point w/ flag
-                        rec.setValue(new Float(DataObject.toFloat(data, 1, 4)).toString());
+                        rec.setValue(new Float(DataObject.toFloat(data, 1)).toString());
                         break;
                     case 6:
                         //64 bit floating point w/ flag
-                        rec.setValue(new Float(DataObject.toFloat(data, 1, 8)).toString());
+                        rec.setValue(new Double(DataObject.toDouble(data, 1)).toString());
                         break;
                     case 7:
                         //32 bit floating point w/ flag and time
-                        rec.setValue(new Float(DataObject.toFloat(data, 1, 4)).toString());
+                        rec.setValue(new Float(DataObject.toFloat(data, 1)).toString());
                         rec.setTimestamp(DataObject.toLong(data, 5, 6));
                         break;
                     case 8:
                         //64 bit floating point w/ flag and time
-                        rec.setValue(new Float(DataObject.toFloat(data, 1, 8)).toString());
+                        rec.setValue(new Double(DataObject.toDouble(data, 1)).toString());
                         rec.setTimestamp(DataObject.toLong(data, 9, 6));
                         break;
                     default:
@@ -554,20 +554,20 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                         break;
                     case 5:
                         //32 bit floating point w/ flag
-                        rec.setValue(new Float(DataObject.toFloat(data, 1, 4)).toString());
+                        rec.setValue(new Float(DataObject.toFloat(data, 1)).toString());
                         break;
                     case 6:
                         //64 bit floating point w/ flag
-                        rec.setValue(new Float(DataObject.toFloat(data, 1, 8)).toString());
+                        rec.setValue(new Double(DataObject.toDouble(data, 1)).toString());
                         break;
                     case 7:
                         //32 bit floating point w/ flag and time
-                        rec.setValue(new Float(DataObject.toFloat(data, 1, 4)).toString());
+                        rec.setValue(new Float(DataObject.toFloat(data, 1)).toString());
                         rec.setTimestamp(DataObject.toLong(data, 5, 6));
                         break;
                     case 8:
                         //64 bit floating point w/ flag and time
-                        rec.setValue(new Float(DataObject.toFloat(data, 1, 8)).toString());
+                        rec.setValue(new Double(DataObject.toDouble(data, 1)).toString());
                         rec.setTimestamp(DataObject.toLong(data, 9, 6));
                         break;
                     default:
@@ -587,7 +587,7 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                         break;
                     case 3:
                         //32 bit floating point
-                        rec.setValue(new Float(DataObject.toFloat(data, 0, 4)).toString());
+                        rec.setValue(new Float(DataObject.toFloat(data, 0)).toString());
                         break;
                     default:
                         break;
@@ -606,11 +606,11 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                         break;
                     case 3:
                         //32 bit floating point w/ flag
-                        rec.setValue(new Float(DataObject.toFloat(data, 1, 4)).toString());
+                        rec.setValue(new Float(DataObject.toFloat(data, 1)).toString());
                         break;
                     case 4:
                         //64 bit floating point w/ flag
-                        rec.setValue(new Float(DataObject.toFloat(data, 1, 8)).toString());
+                        rec.setValue(new Double(DataObject.toDouble(data, 1)).toString());
                         break;
                     default:
                         break;
@@ -639,20 +639,20 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                         break;
                     case 5:
                         //32 bit floating point w/ flag
-                        rec.setValue(new Float(DataObject.toFloat(data, 1, 4)).toString());
+                        rec.setValue(new Float(DataObject.toFloat(data, 1)).toString());
                         break;
                     case 6:
                         //64 bit floating point w/ flag
-                        rec.setValue(new Float(DataObject.toFloat(data, 1, 8)).toString());
+                        rec.setValue(new Double(DataObject.toDouble(data, 1)).toString());
                         break;
                     case 7:
                         //32 bit floating point w/ flag and time
-                        rec.setValue(new Float(DataObject.toFloat(data, 1, 4)).toString());
+                        rec.setValue(new Float(DataObject.toFloat(data, 1)).toString());
                         rec.setTimestamp(DataObject.toLong(data, 5, 6));
                         break;
                     case 8:
                         //64 bit floating point w/ flag
-                        rec.setValue(new Float(DataObject.toFloat(data, 1, 8)).toString());
+                        rec.setValue(new Double(DataObject.toDouble(data, 1)).toString());
                         rec.setTimestamp(DataObject.toLong(data, 9, 6));
                         break;
                     default:
