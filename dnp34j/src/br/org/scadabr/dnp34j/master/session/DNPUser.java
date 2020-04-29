@@ -126,29 +126,33 @@ public class DNPUser implements InitFeatures, DataMapFeatures, AppFeatures {
         Buffer commandFrame = appSnd.buildRequestMsg(operateMode, BINARY_OUTPUT_COMMAND, (byte) 1,
                 new int[] {index}, WITH_DATA);
 
+        int marker = 7;
         commandFrame.writeByte(DataObject.toBytes(index, 1)[0]);
-        commandFrame.setMarker(7);
+        commandFrame.setMarker(marker++);
         commandFrame.writeByte(controlCode);
 
+        //Number of times to cycle
+        commandFrame.setMarker(marker++);
+        commandFrame.writeByte((byte)1);
+
         byte[] timeOnBytes = DataObject.toBytes(timeOn, 4);
-        commandFrame.setMarker(9);
+        commandFrame.setMarker(marker++);
         commandFrame.writeByte(timeOnBytes[0]);
-        commandFrame.setMarker(10);
+        commandFrame.setMarker(marker++);
         commandFrame.writeByte(timeOnBytes[1]);
-        commandFrame.setMarker(11);
+        commandFrame.setMarker(marker++);
         commandFrame.writeByte(timeOnBytes[2]);
-        commandFrame.setMarker(12);
+        commandFrame.setMarker(marker++);
         commandFrame.writeByte(timeOnBytes[3]);
 
         byte[] timeOffBytes = DataObject.toBytes(timeOff, 4);
-
-        commandFrame.setMarker(13);
+        commandFrame.setMarker(marker++);
         commandFrame.writeByte(timeOffBytes[0]);
-        commandFrame.setMarker(14);
+        commandFrame.setMarker(marker++);
         commandFrame.writeByte(timeOffBytes[1]);
-        commandFrame.setMarker(15);
+        commandFrame.setMarker(marker++);
         commandFrame.writeByte(timeOffBytes[2]);
-        commandFrame.setMarker(16);
+        commandFrame.setMarker(marker++);
         commandFrame.writeByte(timeOffBytes[3]);
         commandFrame.writeByte((byte) 0x00);
 
