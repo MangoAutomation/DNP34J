@@ -279,12 +279,13 @@ public class DataElement implements DataMapFeatures {
         switch(group) {
             case DataMapFeatures.ANA_IN:
             case DataMapFeatures.ANA_OUT:
-                return !isOnline() || isCommsLost() || isOverRange() || isReferenceError();
+                return !isOnline() || isRestart() || isCommsLost() || isRemoteForced() || isLocalForced() || isOverRange() || isReferenceError();
             case DataMapFeatures.COUNTER:
-                return !isOnline() || isCommsLost() || isRollover() || isDiscontinuity();
+                return !isOnline() || isCommsLost() || isRemoteForced() || isLocalForced() || isRollover() || isDiscontinuity();
             case DataMapFeatures.BIN_IN:
+                return !isOnline() || isCommsLost() || isRemoteForced() || isLocalForced() || isChatterFilter();
             case DataMapFeatures.BIN_OUT:
-                return !isOnline() || isCommsLost();
+                return !isOnline() || isCommsLost() || isRemoteForced() || isLocalForced();
             default:
                 return false;
         }
@@ -306,7 +307,7 @@ public class DataElement implements DataMapFeatures {
         return (((byte)quality) & 0b00001000) == 1;
     }
 
-    public boolean islocalForced() {
+    public boolean isLocalForced() {
         return (((byte)quality) & 0b00010000) == 1;
     }
 
@@ -340,6 +341,14 @@ public class DataElement implements DataMapFeatures {
      */
     public boolean isDiscontinuity() {
         return (((byte)quality) & 0b01000000) == 1;
+    }
+
+    /**
+     * For Binary Input
+     * @return
+     */
+    public boolean isChatterFilter() {
+        return (((byte)quality) & 0b00100000) == 1;
     }
 
     @Override
