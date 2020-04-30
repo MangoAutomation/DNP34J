@@ -107,52 +107,57 @@ public class DNPUser implements InitFeatures, DataMapFeatures, AppFeatures {
         return request;
     }
 
+    /**
+     * Build a 16bit analog output command
+     * @param operateMode
+     * @param index
+     * @param value
+     * @return
+     */
     public Buffer buildAnalogControlCommand(byte operateMode, int index, int value) {
         Buffer commandFrame = appSnd.buildRequestMsg(operateMode, ANALOG_OUTPUT_COMMAND, (byte) 2,
                 new int[] {index}, WITH_DATA);
 
         byte[] valueOnBytes = DataObject.toBytes(value, 2);
-        commandFrame.setMarker(7);
         commandFrame.writeByte(valueOnBytes[0]);
-        commandFrame.setMarker(8);
         commandFrame.writeByte(valueOnBytes[1]);
         commandFrame.writeByte((byte) 0x00);
 
         return commandFrame;
     }
 
+    /**
+     * Build a binary operate command
+     * @param operateMode
+     * @param index
+     * @param controlCode
+     * @param timeOn
+     * @param timeOff
+     * @return
+     */
     public Buffer buildBinaryControlCommand(byte operateMode, int index, byte controlCode,
             int timeOn, int timeOff) {
-        Buffer commandFrame = appSnd.buildRequestMsg(operateMode, BINARY_OUTPUT_COMMAND, (byte) 1,
-                new int[] {index}, WITH_DATA);
+        Buffer commandFrame = appSnd.buildRequestMsg(operateMode,
+                DataMapFeatures.BINARY_OUTPUT_COMMAND,
+                (byte) 1,
+                new int[] {index}, DataMapFeatures.WITH_DATA);
 
-        int marker = 7;
-        commandFrame.writeByte(DataObject.toBytes(index, 1)[0]);
-        commandFrame.setMarker(marker++);
+        //Control code
         commandFrame.writeByte(controlCode);
 
         //Number of times to cycle
-        commandFrame.setMarker(marker++);
         commandFrame.writeByte((byte)1);
 
         byte[] timeOnBytes = DataObject.toBytes(timeOn, 4);
-        commandFrame.setMarker(marker++);
         commandFrame.writeByte(timeOnBytes[0]);
-        commandFrame.setMarker(marker++);
         commandFrame.writeByte(timeOnBytes[1]);
-        commandFrame.setMarker(marker++);
         commandFrame.writeByte(timeOnBytes[2]);
-        commandFrame.setMarker(marker++);
         commandFrame.writeByte(timeOnBytes[3]);
 
         byte[] timeOffBytes = DataObject.toBytes(timeOff, 4);
-        commandFrame.setMarker(marker++);
         commandFrame.writeByte(timeOffBytes[0]);
-        commandFrame.setMarker(marker++);
         commandFrame.writeByte(timeOffBytes[1]);
-        commandFrame.setMarker(marker++);
         commandFrame.writeByte(timeOffBytes[2]);
-        commandFrame.setMarker(marker++);
         commandFrame.writeByte(timeOffBytes[3]);
         commandFrame.writeByte((byte) 0x00);
 
