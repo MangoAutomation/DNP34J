@@ -166,16 +166,63 @@ public class DataObject implements InitFeatures, DataMapFeatures {
     }
 
     /**
+     * Convert to short from bytes
+     * @param byteArray
+     * @param offset
+     * @param len
+     * @return
+     */
+    public static final short toShort(byte[] byteArray, int offset) {
+        short val = 0;
+        for (int i = (2 - 1); i >= 0; i--) {
+            val <<= 8;
+            val |= (byteArray[offset + i] & 0x00FF);
+        }
+        return val;
+    }
+
+    /**
+     * Convert to int from bytes
+     * @param byteArray
+     * @param offset
+     * @param len
+     * @return
+     */
+    public static final int toInt(byte[] byteArray, int offset) {
+        int val = 0;
+        for (int i = (4 - 1); i >= 0; i--) {
+            val <<= 8;
+            val |= (byteArray[offset + i] & 0x00FF);
+        }
+        return val;
+    }
+
+    /**
+     * Convert to long time from 6 bytes
+     * @param byteArray
+     * @param offset
+     * @param len
+     * @return
+     */
+    public static final long toTime(byte[] byteArray, int offset) {
+        long val = 0;
+        for (int i = (6 - 1); i >= 0; i--) {
+            val <<= 8;
+            val |= (byteArray[offset + i] & 0x00FF);
+        }
+        return val;
+    }
+
+    /**
      * Convert to long from bytes
      * @param byteArray
      * @param offset
      * @param len
      * @return
      */
-    public static final long toLong(byte[] byteArray, int offset, int len) {
+    public static final long toLong(byte[] byteArray, int offset) {
         long val = 0;
-        len = Math.min(len, 8);
-        for (int i = (len - 1); i >= 0; i--) {
+        for (int i = (8 - 1); i >= 0; i--) {
             val <<= 8;
             val |= (byteArray[offset + i] & 0x00FF);
         }
@@ -221,7 +268,12 @@ public class DataObject implements InitFeatures, DataMapFeatures {
      * @return
      */
     public static final byte[] getFloat(float value) {
-        return ByteBuffer.allocate(4).putFloat(value).array();
+        ByteBuffer buffer = ByteBuffer.allocate(4)
+                .order(ByteOrder.LITTLE_ENDIAN).putFloat(value);
+        buffer.rewind();
+        byte[] bytes = new byte[buffer.remaining()];
+        buffer.get(bytes);
+        return bytes;
     }
 
     /**
@@ -230,7 +282,12 @@ public class DataObject implements InitFeatures, DataMapFeatures {
      * @return
      */
     public static final byte[] getDouble(double value) {
-        return ByteBuffer.allocate(8).putDouble(value).array();
+        ByteBuffer buffer = ByteBuffer.allocate(8)
+                .order(ByteOrder.LITTLE_ENDIAN).putDouble(value);
+        buffer.rewind();
+        byte[] bytes = new byte[buffer.remaining()];
+        buffer.get(bytes);
+        return bytes;
     }
 
 
