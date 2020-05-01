@@ -284,7 +284,7 @@ public class DataLengths implements DataMapFeatures {
                         return 88;
                     case 4:
                         //16 bits w/ flag and time
-                        return 24;
+                        return 72;
                     case 5:
                         //32 bit floating point w/ flag
                         return 40;
@@ -316,7 +316,7 @@ public class DataLengths implements DataMapFeatures {
                         return 88;
                     case 4:
                         //16 bits w/ flag and time
-                        return 24;
+                        return 72;
                     case 5:
                         //32 bit floating point w/ flag
                         return 40;
@@ -382,7 +382,7 @@ public class DataLengths implements DataMapFeatures {
                         return 88;
                     case 4:
                         //16 bits w/ flag and time
-                        return 24;
+                        return 72;
                     case 5:
                         //32 bit floating point w/ flag
                         return 40;
@@ -406,8 +406,8 @@ public class DataLengths implements DataMapFeatures {
                         //32 bit int with control status
                         return 40;
                     case 2:
-                        //24 bit int with control status
-                        return 16;
+                        //16 bit int with control status
+                        return 24;
                     case 3:
                         //32 bit float with control status
                         return 40;
