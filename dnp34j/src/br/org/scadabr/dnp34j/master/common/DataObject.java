@@ -214,22 +214,6 @@ public class DataObject implements InitFeatures, DataMapFeatures {
     }
 
     /**
-     * Convert to long from bytes
-     * @param byteArray
-     * @param offset
-     * @param len
-     * @return
-     */
-    public static final long toLong(byte[] byteArray, int offset) {
-        long val = 0;
-        for (int i = (8 - 1); i >= 0; i--) {
-            val <<= 8;
-            val |= (byteArray[offset + i] & 0x00FF);
-        }
-        return val;
-    }
-
-    /**
      * Convert to IEEE Float from bytes this requires 4 bytes in the array after offset
      * @param byteArray
      * @param offset
@@ -260,6 +244,34 @@ public class DataObject implements InitFeatures, DataMapFeatures {
         ByteBuffer b = ByteBuffer.wrap(Arrays.copyOfRange(byteArray, offset, offset + 8))
                 .order(ByteOrder.LITTLE_ENDIAN);
         return b.getDouble();
+    }
+
+    /**
+     * Convert from short to 2 bytes
+     * @param value
+     * @return
+     */
+    public static final byte[] getShort(short value) {
+        ByteBuffer buffer = ByteBuffer.allocate(2)
+                .order(ByteOrder.LITTLE_ENDIAN).putShort(value);
+        buffer.rewind();
+        byte[] bytes = new byte[buffer.remaining()];
+        buffer.get(bytes);
+        return bytes;
+    }
+
+    /**
+     * Convert from integer to 4 bytes
+     * @param value
+     * @return
+     */
+    public static final byte[] getInt(int value) {
+        ByteBuffer buffer = ByteBuffer.allocate(4)
+                .order(ByteOrder.LITTLE_ENDIAN).putInt(value);
+        buffer.rewind();
+        byte[] bytes = new byte[buffer.remaining()];
+        buffer.get(bytes);
+        return bytes;
     }
 
     /**
@@ -321,21 +333,6 @@ public class DataObject implements InitFeatures, DataMapFeatures {
             result[i] = (byte) ((delay >> (8 * i)) & 0xFF);
         }
 
-        return result;
-    }
-
-    /**
-     * Convert int to bytes
-     * @param value
-     * @param size
-     * @return
-     */
-    public static byte[] toBytes(int value, int size) {
-        byte[] result = new byte[size];
-
-        for (int i = 0; i < result.length; i++) {
-            result[i] = (byte) ((value >> (8 * i)) & 0xFF);
-        }
         return result;
     }
 

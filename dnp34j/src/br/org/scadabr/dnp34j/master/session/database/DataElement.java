@@ -12,7 +12,7 @@ public class DataElement implements DataMapFeatures {
     private byte variation;
     private long timestamp;
     private int quality;
-    private String value;
+    private Object value;
 
     public int getIndex() {
         return index;
@@ -62,11 +62,11 @@ public class DataElement implements DataMapFeatures {
         this.quality = quality;
     }
 
-    public String getValue() {
+    public Object getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(Object value) {
         this.value = value;
     }
 

@@ -4,7 +4,6 @@
 
 package com.infiniteautomation.dnp34j;
 
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -23,7 +22,6 @@ public class TestReadFloat {
 
     public static void main(String[] args) throws Exception {
 
-        NumberFormat format = NumberFormat.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 
@@ -43,7 +41,7 @@ public class TestReadFloat {
                     if (elements != null) {
                         for (DataElement element : elements) {
                             long deviceTime = element.getTimestamp();
-                            Number number = format.parse(element.getValue());
+                            Number number = (Number)element.getValue();
                             double value = number.doubleValue();
                             System.out.println(value + " @ " + sdf.format(new Date(deviceTime)));
                         }

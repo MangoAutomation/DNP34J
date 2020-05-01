@@ -248,17 +248,13 @@ DataMapFeatures {
                     byteValues[i] = (byte)values[i];
                 }
                 requestFrame.writeBytes(byteValues);
-                // requestFrame.writeBytes(appRcv.getDataMap().get(group,
-                // variation, values, (byte) 0x17));
-            } else {
-                byte[] byteValues = new byte[values.length];
-                System.arraycopy(values, 0, byteValues, 0, values.length);
-                requestFrame.writeBytes(byteValues);
             }
         } else {
-            requestFrame.writeByte(INDEXES_16);
-            requestFrame.writeBytes(values.length);
-            requestFrame.writeBytes(values);
+            if (withData) {
+                requestFrame.writeByte(INDEXES_16);
+                requestFrame.writeBytes(values.length);
+                requestFrame.writeBytes(values);
+            }
         }
 
         return requestFrame;
@@ -269,7 +265,7 @@ DataMapFeatures {
      * with multiple objects
      */
     public Buffer addObjectToRequest(Buffer requestFrame, byte FC, byte group,
-            byte variation, int start, int stop, boolean withData)
+            byte variation, int start, int stop)
                     throws Exception {
         if (requestFrame.length() == 0) {
             requestFrame.writeBytes(buildHeader(FC, group, variation));
@@ -287,12 +283,6 @@ DataMapFeatures {
             requestFrame.writeBytes(start);
             requestFrame.writeBytes(stop);
         }
-
-        if (withData) {
-            // requestFrame.writeBytes(dataMap.get(group, variation, start,
-            // stop));
-        }
-
         return requestFrame;
     }
 

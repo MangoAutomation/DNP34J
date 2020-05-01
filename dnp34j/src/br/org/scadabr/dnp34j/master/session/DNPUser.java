@@ -114,11 +114,11 @@ public class DNPUser implements InitFeatures, DataMapFeatures, AppFeatures {
      * @param value
      * @return
      */
-    public Buffer buildAnalogControlCommand(byte operateMode, int index, int value) {
+    public Buffer buildAnalogControlCommand(byte operateMode, int index, short value) {
         Buffer commandFrame = appSnd.buildRequestMsg(operateMode, ANALOG_OUTPUT_COMMAND, (byte) 2,
                 new int[] {index}, WITH_DATA);
 
-        byte[] valueOnBytes = DataObject.toBytes(value, 2);
+        byte[] valueOnBytes = DataObject.getShort(value);
         commandFrame.writeByte(valueOnBytes[0]);
         commandFrame.writeByte(valueOnBytes[1]);
         commandFrame.writeByte((byte) 0x00);
@@ -148,13 +148,13 @@ public class DNPUser implements InitFeatures, DataMapFeatures, AppFeatures {
         //Number of times to cycle
         commandFrame.writeByte((byte)1);
 
-        byte[] timeOnBytes = DataObject.toBytes(timeOn, 4);
+        byte[] timeOnBytes = DataObject.getInt(timeOn);
         commandFrame.writeByte(timeOnBytes[0]);
         commandFrame.writeByte(timeOnBytes[1]);
         commandFrame.writeByte(timeOnBytes[2]);
         commandFrame.writeByte(timeOnBytes[3]);
 
-        byte[] timeOffBytes = DataObject.toBytes(timeOff, 4);
+        byte[] timeOffBytes = DataObject.getInt(timeOff);
         commandFrame.writeByte(timeOffBytes[0]);
         commandFrame.writeByte(timeOffBytes[1]);
         commandFrame.writeByte(timeOffBytes[2]);

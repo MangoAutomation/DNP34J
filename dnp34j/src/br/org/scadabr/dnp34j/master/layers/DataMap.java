@@ -182,25 +182,25 @@ public class DataMap implements DataMapFeatures, InitFeatures {
             case BINARY_INPUT_STATIC:
                 switch(variation) {
                     case 1:
-                        rec.setValue(new Boolean(((data[0] & 0b00000001) != 0)).toString());
+                        rec.setValue(new Boolean(((data[0] & 0b00000001) != 0)));
                         break;
                     case 2:
-                        rec.setValue(new Boolean(((data[0] & 0b10000000) != 0)).toString());
+                        rec.setValue(new Boolean(((data[0] & 0b10000000) != 0)));
                         break;
                 }
                 break;
             case BINARY_INPUT_EVENT:
                 switch(variation) {
                     case 1:
-                        rec.setValue(new Boolean(((data[0] & 0b10000000) != 0)).toString());
+                        rec.setValue(new Boolean(((data[0] & 0b10000000) != 0)));
                         break;
                     case 2:
-                        rec.setValue(new Boolean(((data[0] & 0b10000000) != 0)).toString());
+                        rec.setValue(new Boolean(((data[0] & 0b10000000) != 0)));
                         //Has time
                         rec.setTimestamp(DataObject.toTime(data, 1));
                         break;
                     case 3:
-                        rec.setValue(new Boolean(((data[0] & 0b10000000) != 0)).toString());
+                        rec.setValue(new Boolean(((data[0] & 0b10000000) != 0)));
                         //Common time of occurrence not supported yet so not extracting relative 2 bytes of ms
                         break;
                     default:
@@ -210,20 +210,20 @@ public class DataMap implements DataMapFeatures, InitFeatures {
             case BINARY_OUTPUT_STATIC:
                 switch(variation) {
                     case 1:
-                        rec.setValue(new Boolean(((data[0] & 0b00000001) != 0)).toString());
+                        rec.setValue(new Boolean(((data[0] & 0b00000001) != 0)));
                         break;
                     case 2:
-                        rec.setValue(new Boolean(((data[0] & 0b10000000) != 0)).toString());
+                        rec.setValue(new Boolean(((data[0] & 0b10000000) != 0)));
                         break;
                 }
                 break;
             case BINARY_OUTPUT_EVENT:
                 switch(variation) {
                     case 1:
-                        rec.setValue(new Boolean(((data[0] & 0b10000000) != 0)).toString());
+                        rec.setValue(new Boolean(((data[0] & 0b10000000) != 0)));
                         break;
                     case 2:
-                        rec.setValue(new Boolean(((data[0] & 0b10000000) != 0)).toString());
+                        rec.setValue(new Boolean(((data[0] & 0b10000000) != 0)));
                         //Has time
                         rec.setTimestamp(DataObject.toTime(data, 1));
                         break;
@@ -236,35 +236,35 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                 switch(variation) {
                     case 1:
                         //32 bits w/ flag
-                        rec.setValue(new Integer(DataObject.toInt(data, 1)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 1)));
                         break;
                     case 2:
                         //16 bits w/ flag
-                        rec.setValue(new Short(DataObject.toShort(data, 1)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 1)));
                         break;
                     case 3:
                         //32 bits w/ flag
-                        rec.setValue(new Integer(DataObject.toInt(data, 1)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 1)));
                         break;
                     case 4:
                         //16 bits w/ flag
-                        rec.setValue(new Short(DataObject.toShort(data, 1)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 1)));
                         break;
                     case 5:
                         //32 bits
-                        rec.setValue(new Integer(DataObject.toInt(data, 0)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 0)));
                         break;
                     case 6:
                         //16 bits
-                        rec.setValue(new Short(DataObject.toShort(data, 0)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 0)));
                         break;
                     case 7:
                         //32 bits
-                        rec.setValue(new Integer(DataObject.toInt(data, 0)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 0)));
                         break;
                     case 8:
                         //16 bits
-                        rec.setValue(new Short(DataObject.toShort(data, 0)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 0)));
                         break;
                     default:
                         break;
@@ -275,55 +275,55 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                 switch(variation) {
                     case 1:
                         //32 bits w/ flag
-                        rec.setValue(new Integer(DataObject.toInt(data, 1)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 1)));
                         break;
                     case 2:
                         //16 bits w/ flag
-                        rec.setValue(new Short(DataObject.toShort(data, 1)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 1)));
                         break;
                     case 3:
                         //32 bits w/ flag
-                        rec.setValue(new Integer(DataObject.toInt(data, 1)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 1)));
                         break;
                     case 4:
                         //16 bits w/ flag
-                        rec.setValue(new Short(DataObject.toShort(data, 1)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 1)));
                         break;
                     case 5:
                         //32 bits w/ flag and time
-                        rec.setValue(new Integer(DataObject.toInt(data, 1)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 1)));
                         rec.setTimestamp(DataObject.toTime(data, 5));
                         break;
                     case 6:
                         //16 bits w/ flag and time
-                        rec.setValue(new Short(DataObject.toShort(data, 1)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 1)));
                         rec.setTimestamp(DataObject.toTime(data, 3));
                         break;
                     case 7:
                         //32 bits w/ flag and time
-                        rec.setValue(new Integer(DataObject.toInt(data, 1)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 1)));
                         rec.setTimestamp(DataObject.toTime(data, 5));
                         break;
                     case 8:
                         //16 bits w/ flag and time
-                        rec.setValue(new Short(DataObject.toShort(data, 1)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 1)));
                         rec.setTimestamp(DataObject.toTime(data, 3));
                         break;
                     case 9:
                         //32 bits
-                        rec.setValue(new Integer(DataObject.toInt(data, 0)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 0)));
                         break;
                     case 10:
                         //16 bits
-                        rec.setValue(new Short(DataObject.toShort(data, 0)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 0)));
                         break;
                     case 11:
                         //32 bits
-                        rec.setValue(new Integer(DataObject.toInt(data, 0)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 0)));
                         break;
                     case 12:
                         //16 bits
-                        rec.setValue(new Short(DataObject.toShort(data, 0)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 0)));
                         break;
                     default:
                         break;
@@ -334,38 +334,38 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                 switch(variation) {
                     case 1:
                         //32 bits w/ flag
-                        rec.setValue(new Integer(DataObject.toInt(data, 1)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 1)));
                         break;
                     case 2:
                         //16 bits w/ flag
-                        rec.setValue(new Short(DataObject.toShort(data, 1)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 1)));
                         break;
                     case 3:
                         //32 bits w/ flag
-                        rec.setValue(new Integer(DataObject.toInt(data, 1)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 1)));
                         break;
                     case 4:
                         //16 bits w/ flag
-                        rec.setValue(new Short(DataObject.toShort(data, 1)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 1)));
                         break;
                     case 5:
                         //32 bits w/ flag and time
-                        rec.setValue(new Integer(DataObject.toInt(data, 1)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 1)));
                         rec.setTimestamp(DataObject.toTime(data, 5));
                         break;
                     case 6:
                         //16 bits w/ flag and time
-                        rec.setValue(new Short(DataObject.toShort(data, 1)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 1)));
                         rec.setTimestamp(DataObject.toTime(data, 3));
                         break;
                     case 7:
                         //32 bits w/ flag and time
-                        rec.setValue(new Integer(DataObject.toInt(data, 1)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 1)));
                         rec.setTimestamp(DataObject.toTime(data, 5));
                         break;
                     case 8:
                         //16 bits w/ flag and time
-                        rec.setValue(new Short(DataObject.toShort(data, 1)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 1)));
                         rec.setTimestamp(DataObject.toTime(data, 3));
                         break;
                     default:
@@ -377,38 +377,38 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                 switch(variation) {
                     case 1:
                         //32 bits w/ flag
-                        rec.setValue(new Integer(DataObject.toInt(data, 1)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 1)));
                         break;
                     case 2:
                         //16 bits w/ flag
-                        rec.setValue(new Short(DataObject.toShort(data, 1)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 1)));
                         break;
                     case 3:
                         //32 bits w/ flag
-                        rec.setValue(new Integer(DataObject.toInt(data, 1)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 1)));
                         break;
                     case 4:
                         //16 bits w/ flag
-                        rec.setValue(new Short(DataObject.toShort(data, 1)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 1)));
                         break;
                     case 5:
                         //32 bits w/ flag and time
-                        rec.setValue(new Integer(DataObject.toInt(data, 1)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 1)));
                         rec.setTimestamp(DataObject.toTime(data, 5));
                         break;
                     case 6:
                         //16 bits w/ flag and time
-                        rec.setValue(new Short(DataObject.toShort(data, 1)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 1)));
                         rec.setTimestamp(DataObject.toTime(data, 3));
                         break;
                     case 7:
                         //32 bits w/ flag and time
-                        rec.setValue(new Integer(DataObject.toInt(data, 1)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 1)));
                         rec.setTimestamp(DataObject.toTime(data, 5));
                         break;
                     case 8:
                         //16 bits w/ flag and time
-                        rec.setValue(new Short(DataObject.toShort(data, 1)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 1)));
                         rec.setTimestamp(DataObject.toTime(data, 3));
                         break;
                     default:
@@ -420,27 +420,27 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                 switch(variation) {
                     case 1:
                         //32 bits w/ flag
-                        rec.setValue(new Integer(DataObject.toInt(data, 1)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 1)));
                         break;
                     case 2:
                         //16 bits w/ flag
-                        rec.setValue(new Short(DataObject.toShort(data, 1)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 1)));
                         break;
                     case 3:
                         //32 bits
-                        rec.setValue(new Integer(DataObject.toInt(data, 0)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 0)));
                         break;
                     case 4:
                         //16 bits
-                        rec.setValue(new Short(DataObject.toShort(data, 0)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 0)));
                         break;
                     case 5:
                         //32 bit floating point w/ flag
-                        rec.setValue(new Float(DataObject.toFloat(data, 1)).toString());
+                        rec.setValue(new Float(DataObject.toFloat(data, 1)));
                         break;
                     case 6:
                         //64 bit floating point w/ flag
-                        rec.setValue(new Double(DataObject.toDouble(data, 1)).toString());
+                        rec.setValue(new Double(DataObject.toDouble(data, 1)));
                         break;
                     default:
                         break;
@@ -451,37 +451,37 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                 switch(variation) {
                     case 1:
                         //32 bits w/ flag
-                        rec.setValue(new Integer(DataObject.toInt(data, 1)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 1)));
                         break;
                     case 2:
                         //16 bits w/ flag
-                        rec.setValue(new Short(DataObject.toShort(data, 1)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 1)));
                         break;
                     case 3:
                         //32 bits w/ flag and time
-                        rec.setValue(new Integer(DataObject.toInt(data, 1)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 1)));
                         rec.setTimestamp(DataObject.toTime(data, 5));
                         break;
                     case 4:
                         //16 bits w/ flag and time
-                        rec.setValue(new Short(DataObject.toShort(data, 1)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 1)));
                         rec.setTimestamp(DataObject.toTime(data, 3));
                         break;
                     case 5:
                         //32 bits
-                        rec.setValue(new Integer(DataObject.toInt(data, 0)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 0)));
                         break;
                     case 6:
                         //16 bits
-                        rec.setValue(new Short(DataObject.toShort(data, 0)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 0)));
                         break;
                     case 7:
                         //32 bit floating point w/ flag
-                        rec.setValue(new Float(DataObject.toFloat(data, 1)).toString());
+                        rec.setValue(new Float(DataObject.toFloat(data, 1)));
                         break;
                     case 8:
                         //64 bit floating point w/ flag
-                        rec.setValue(new Double(DataObject.toDouble(data, 1)).toString());
+                        rec.setValue(new Double(DataObject.toDouble(data, 1)));
                         break;
                     default:
                         break;
@@ -492,38 +492,38 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                 switch(variation) {
                     case 1:
                         //32 bits w/ flag
-                        rec.setValue(new Integer(DataObject.toInt(data, 1)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 1)));
                         break;
                     case 2:
                         //16 bits w/ flag
-                        rec.setValue(new Short(DataObject.toShort(data, 1)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 1)));
                         break;
                     case 3:
                         //32 bits w/ flag and time
-                        rec.setValue(new Integer(DataObject.toInt(data, 1)).toString());
-                        rec.setTimestamp(DataObject.toLong(data, 5));
+                        rec.setValue(new Integer(DataObject.toInt(data, 1)));
+                        rec.setTimestamp(DataObject.toTime(data, 5));
                         break;
                     case 4:
                         //16 bits w/ flag and time
-                        rec.setValue(new Short(DataObject.toShort(data, 1)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 1)));
                         rec.setTimestamp(DataObject.toTime(data, 3));
                         break;
                     case 5:
                         //32 bit floating point w/ flag
-                        rec.setValue(new Float(DataObject.toFloat(data, 1)).toString());
+                        rec.setValue(new Float(DataObject.toFloat(data, 1)));
                         break;
                     case 6:
                         //64 bit floating point w/ flag
-                        rec.setValue(new Double(DataObject.toDouble(data, 1)).toString());
+                        rec.setValue(new Double(DataObject.toDouble(data, 1)));
                         break;
                     case 7:
                         //32 bit floating point w/ flag and time
-                        rec.setValue(new Float(DataObject.toFloat(data, 1)).toString());
+                        rec.setValue(new Float(DataObject.toFloat(data, 1)));
                         rec.setTimestamp(DataObject.toTime(data, 5));
                         break;
                     case 8:
                         //64 bit floating point w/ flag and time
-                        rec.setValue(new Double(DataObject.toDouble(data, 1)).toString());
+                        rec.setValue(new Double(DataObject.toDouble(data, 1)));
                         rec.setTimestamp(DataObject.toTime(data, 9));
                         break;
                     default:
@@ -536,38 +536,38 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                 switch(variation) {
                     case 1:
                         //32 bits w/ flag
-                        rec.setValue(new Integer(DataObject.toInt(data, 1)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 1)));
                         break;
                     case 2:
                         //16 bits w/ flag
-                        rec.setValue(new Short(DataObject.toShort(data, 1)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 1)));
                         break;
                     case 3:
                         //32 bits w/ flag and time
-                        rec.setValue(new Integer(DataObject.toInt(data, 1)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 1)));
                         rec.setTimestamp(DataObject.toTime(data, 5));
                         break;
                     case 4:
                         //16 bits w/ flag and time
-                        rec.setValue(new Short(DataObject.toShort(data, 1)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 1)));
                         rec.setTimestamp(DataObject.toTime(data, 3));
                         break;
                     case 5:
                         //32 bit floating point w/ flag
-                        rec.setValue(new Float(DataObject.toFloat(data, 1)).toString());
+                        rec.setValue(new Float(DataObject.toFloat(data, 1)));
                         break;
                     case 6:
                         //64 bit floating point w/ flag
-                        rec.setValue(new Double(DataObject.toDouble(data, 1)).toString());
+                        rec.setValue(new Double(DataObject.toDouble(data, 1)));
                         break;
                     case 7:
                         //32 bit floating point w/ flag and time
-                        rec.setValue(new Float(DataObject.toFloat(data, 1)).toString());
+                        rec.setValue(new Float(DataObject.toFloat(data, 1)));
                         rec.setTimestamp(DataObject.toTime(data, 5));
                         break;
                     case 8:
                         //64 bit floating point w/ flag and time
-                        rec.setValue(new Double(DataObject.toDouble(data, 1)).toString());
+                        rec.setValue(new Double(DataObject.toDouble(data, 1)));
                         rec.setTimestamp(DataObject.toTime(data, 9));
                         break;
                     default:
@@ -579,15 +579,15 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                 switch(variation) {
                     case 1:
                         //16 bits
-                        rec.setValue(new Short(DataObject.toShort(data, 0)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 0)));
                         break;
                     case 2:
                         //32 bits
-                        rec.setValue(new Integer(DataObject.toInt(data, 0)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 0)));
                         break;
                     case 3:
                         //32 bit floating point
-                        rec.setValue(new Float(DataObject.toFloat(data, 0)).toString());
+                        rec.setValue(new Float(DataObject.toFloat(data, 0)));
                         break;
                     default:
                         break;
@@ -598,19 +598,19 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                 switch(variation) {
                     case 1:
                         //32 bits w/ flag
-                        rec.setValue(new Integer(DataObject.toInt(data, 1)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 1)));
                         break;
                     case 2:
                         //16 bits w/ flag
-                        rec.setValue(new Short(DataObject.toShort(data, 1)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 1)));
                         break;
                     case 3:
                         //32 bit floating point w/ flag
-                        rec.setValue(new Float(DataObject.toFloat(data, 1)).toString());
+                        rec.setValue(new Float(DataObject.toFloat(data, 1)));
                         break;
                     case 4:
                         //64 bit floating point w/ flag
-                        rec.setValue(new Double(DataObject.toDouble(data, 1)).toString());
+                        rec.setValue(new Double(DataObject.toDouble(data, 1)));
                         break;
                     default:
                         break;
@@ -621,38 +621,38 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                 switch(variation) {
                     case 1:
                         //32 bits w/ flag
-                        rec.setValue(new Integer(DataObject.toInt(data, 1)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 1)));
                         break;
                     case 2:
                         //16 bits w/ flag
-                        rec.setValue(new Short(DataObject.toShort(data, 1)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 1)));
                         break;
                     case 3:
                         //32 bits w/ flag and time
-                        rec.setValue(new Integer(DataObject.toInt(data, 1)).toString());
+                        rec.setValue(new Integer(DataObject.toInt(data, 1)));
                         rec.setTimestamp(DataObject.toTime(data, 5));
                         break;
                     case 4:
                         //16 bits w/ flag and time
-                        rec.setValue(new Short(DataObject.toShort(data, 1)).toString());
+                        rec.setValue(new Short(DataObject.toShort(data, 1)));
                         rec.setTimestamp(DataObject.toTime(data, 3));
                         break;
                     case 5:
                         //32 bit floating point w/ flag
-                        rec.setValue(new Float(DataObject.toFloat(data, 1)).toString());
+                        rec.setValue(new Float(DataObject.toFloat(data, 1)));
                         break;
                     case 6:
                         //64 bit floating point w/ flag
-                        rec.setValue(new Double(DataObject.toDouble(data, 1)).toString());
+                        rec.setValue(new Double(DataObject.toDouble(data, 1)));
                         break;
                     case 7:
                         //32 bit floating point w/ flag and time
-                        rec.setValue(new Float(DataObject.toFloat(data, 1)).toString());
+                        rec.setValue(new Float(DataObject.toFloat(data, 1)));
                         rec.setTimestamp(DataObject.toTime(data, 5));
                         break;
                     case 8:
                         //64 bit floating point w/ flag
-                        rec.setValue(new Double(DataObject.toDouble(data, 1)).toString());
+                        rec.setValue(new Double(DataObject.toDouble(data, 1)));
                         rec.setTimestamp(DataObject.toTime(data, 9));
                         break;
                     default:
