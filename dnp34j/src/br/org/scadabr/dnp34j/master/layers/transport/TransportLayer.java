@@ -89,47 +89,7 @@ public class TransportLayer implements AppFeatures, InitFeatures {
     // handle a transport frame and redirect it to application layer
     public void handleTransportMsg(Buffer trsFrame, int currentRemoteStation) throws Exception {
         byte TH = trsFrame.readByte();
-        if (DEBUG && !checkTransportMsg(TH, currentRemoteStation)) {
-            System.out.println("[Transport] ERROR : transport frame incorrect. ");
-        } else {
-            pushUpper(TH, trsFrame, currentRemoteStation);
-        }
-    }
-
-    // check a transport frame from a link frame
-    private boolean checkTransportMsg(byte TH, int currentRemoteStation) throws Exception {
-        boolean valid = true;
-
-        byte trsSeq = (byte) (TH & 0x3F);
-
-        if (trsFirstFrame[currentRemoteStation]) {
-            if ((TH & 0x40) != 0x40) {
-                if (DEBUG) {
-                    System.out.println("[Transport] ERROR : not the first transport frame");
-                }
-
-                valid = false;
-            }
-
-            trsLastSeq[currentRemoteStation] = trsSeq;
-            trsFirstFrame[currentRemoteStation] = false;
-        } else // check if it's the frame expected
-        {
-            if (trsLastSeq[currentRemoteStation] != trsSeq) {
-                if (DEBUG) {
-                    System.out.println("[Transport] ERROR : RcvSeq = " + trsSeq + ", ExpSeq = "
-                            + trsLastSeq[currentRemoteStation]);
-                }
-
-                valid = false;
-            }
-        }
-        if (valid) {
-
-            trsLastSeq[currentRemoteStation] = (byte) ((trsLastSeq[currentRemoteStation] + 1) % 64);
-        }
-        System.out.println("Transport Layer: " + valid);
-        return valid;
+        pushUpper(TH, trsFrame, currentRemoteStation);
     }
 
     // ///////////////////////////////////////////////////////////////////////

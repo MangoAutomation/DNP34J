@@ -235,26 +235,30 @@ DataMapFeatures {
      * CONTROL function
      */
     public Buffer buildRequestMsg(byte FC, byte group, byte variation,
-            int[] values, boolean withData) {
+            int[] values, boolean withData, byte qualifier) {
         Buffer requestFrame = new Buffer(S);
         requestFrame.writeBytes(buildHeader(FC, group, variation));
 
-        if (values[values.length - 1] < 256) {
-            requestFrame.writeByte(INDEXES_8);
-            requestFrame.writeByte((byte) values.length);
-            if (withData) {
-                byte[] byteValues = new byte[values.length];
-                for(int i=0; i<values.length; i++) {
-                    byteValues[i] = (byte)values[i];
+        switch(qualifier) {
+            case INDEXES_8:
+                requestFrame.writeByte(INDEXES_8);
+                requestFrame.writeByte((byte) values.length);
+                if (withData) {
+                    byte[] byteValues = new byte[values.length];
+                    for(int i=0; i<values.length; i++) {
+                        byteValues[i] = (byte)values[i];
+                    }
+                    requestFrame.writeBytes(byteValues);
                 }
-                requestFrame.writeBytes(byteValues);
-            }
-        } else {
-            if (withData) {
-                requestFrame.writeByte(INDEXES_16);
-                requestFrame.writeBytes(values.length);
-                requestFrame.writeBytes(values);
-            }
+            break;
+            case INDEXES_16:
+
+                if (withData) {
+                    requestFrame.writeByte(INDEXES_16);
+                    requestFrame.writeBytes(values.length);
+                    requestFrame.writeBytes(values);
+                }
+            break;
         }
 
         return requestFrame;

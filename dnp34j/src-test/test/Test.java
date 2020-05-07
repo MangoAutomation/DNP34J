@@ -14,7 +14,7 @@ public class Test {
     public static void main(String[] args) throws Exception {
         EthernetParameters params = new EthernetParameters("mangoautomation.net", 20000);
         DNPConfig configuration = new DNPConfig(params, 11, 0);
-        user = new DNPUser(configuration);
+        user = new DNPUser(configuration, null);
         user.init();
 
         try {

@@ -19,7 +19,7 @@ import br.org.scadabr.dnp34j.serial.SerialPortWrapper;
  * <p>
  * This class manages the physical connection with the remote DNP device. It allows link layer to
  * send frames & unlock it when data is available
- * 
+ *
  * @author <a href="mailto:alexis.clerc@sysaware.com">Alexis CLERC
  *         &lt;alexis.clerc@sysaware.com&gt;</a>
  */
@@ -43,6 +43,7 @@ public class PhyLayer implements LnkFeatures, InitFeatures {
     private PhyETHERNET phyETHERNET;
     private Socket socket;
     private PhyLayer phyLayer;
+    private DNPUser user;
 
     /**
      * Constructor. Initalize physical port, with InitFeatures & MainClass parameters
@@ -54,6 +55,7 @@ public class PhyLayer implements LnkFeatures, InitFeatures {
     public PhyLayer(DNPUser user) throws Exception {
         this.config = user.getConfig();
         process(config);
+        this.user = user;
     }
 
     // =============================================================================
@@ -87,7 +89,7 @@ public class PhyLayer implements LnkFeatures, InitFeatures {
 
     /**
      * DOCUMENT ME!
-     * 
+     *
      * @throws Exception
      */
     public void reconnect() throws Exception {
@@ -115,7 +117,7 @@ public class PhyLayer implements LnkFeatures, InitFeatures {
 
     /**
      * DOCUMENT ME!
-     * 
+     *
      * @throws Exception
      */
     public synchronized void close() throws Exception {
@@ -134,7 +136,7 @@ public class PhyLayer implements LnkFeatures, InitFeatures {
 
     /**
      * DOCUMENT ME!
-     * 
+     *
      * @param someByte DOCUMENT ME!
      */
     public synchronized void write(byte[] someByte) throws Exception {
@@ -158,6 +160,7 @@ public class PhyLayer implements LnkFeatures, InitFeatures {
                 System.out.println("[PhyLayer] Writing Exception");
                 System.out.println("[PhyLayer] Remote Connection closed.");
             }
+            user.reportException(e);
         }
     }
 

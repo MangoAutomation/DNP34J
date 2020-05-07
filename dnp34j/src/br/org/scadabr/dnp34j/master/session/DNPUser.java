@@ -1,5 +1,7 @@
 package br.org.scadabr.dnp34j.master.session;
 
+import java.util.function.Consumer;
+
 import br.org.scadabr.dnp34j.master.common.AppFeatures;
 import br.org.scadabr.dnp34j.master.common.DataMapFeatures;
 import br.org.scadabr.dnp34j.master.common.DataObject;
@@ -28,9 +30,11 @@ public class DNPUser implements InitFeatures, DataMapFeatures, AppFeatures {
 
     private Database database;
     private DNPConfig config;
+    private Consumer<Exception> exceptionHandler;
 
-    public DNPUser(DNPConfig config) {
+    public DNPUser(DNPConfig config, Consumer<Exception> exceptionHandler) {
         this.config = config;
+        this.exceptionHandler = exceptionHandler;
     }
 
     public void init() throws Exception {
@@ -74,9 +78,9 @@ public class DNPUser implements InitFeatures, DataMapFeatures, AppFeatures {
     public synchronized void sendSynch(Buffer aFrame) throws Exception {
         appRcv.push(aFrame, false);
         userRcvLock.lock();
-        if (!userRcvLock.waiting(config.getRequestTimeout()))
+        if (!userRcvLock.waiting(config.getRequestTimeout())) {
             throw new Exception("REQUEST TIMEOUT EXCEPTION");
-        //Thread.sleep(100);
+        };
     }
 
     public synchronized void send(Buffer aFrame) throws Exception {
@@ -116,7 +120,7 @@ public class DNPUser implements InitFeatures, DataMapFeatures, AppFeatures {
      */
     public Buffer buildAnalogControlCommand(byte operateMode, int index, short value) {
         Buffer commandFrame = appSnd.buildRequestMsg(operateMode, ANALOG_OUTPUT_COMMAND, (byte) 2,
-                new int[] {index}, WITH_DATA);
+                new int[] {index}, WITH_DATA, INDEXES_16);
 
         byte[] valueOnBytes = DataObject.getShort(value);
         commandFrame.writeByte(valueOnBytes[0]);
@@ -140,7 +144,7 @@ public class DNPUser implements InitFeatures, DataMapFeatures, AppFeatures {
         Buffer commandFrame = appSnd.buildRequestMsg(operateMode,
                 DataMapFeatures.BINARY_OUTPUT_COMMAND,
                 (byte) 1,
-                new int[] {index}, DataMapFeatures.WITH_DATA);
+                new int[] {index}, DataMapFeatures.WITH_DATA, INDEXES_16);
 
         //Control code
         commandFrame.writeByte(controlCode);
@@ -246,5 +250,11 @@ public class DNPUser implements InitFeatures, DataMapFeatures, AppFeatures {
 
     public Lock getUserRcvLock() {
         return userRcvLock;
+    }
+
+    public void reportException(Exception e) {
+        if(exceptionHandler != null) {
+            exceptionHandler.accept(e);
+        }
     }
 }

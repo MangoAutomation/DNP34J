@@ -24,7 +24,7 @@ import br.org.scadabr.dnp34j.master.layers.link.LnkSnd;
  * <p>
  * This class is an interface between DNP protocol and DNP external application It ties up the application layer of the
  * protocol with a database and a control/command application
- * 
+ *
  * @author <a href="mailto:alexis.clerc@sysaware.com">Alexis CLERC
  *         &lt;alexis.clerc@sysaware.com&gt;</a>
  */
@@ -114,7 +114,7 @@ public class User extends Thread implements InitFeatures, DataMapFeatures, AppFe
 
     /**
      * Initialize user parameters with Configuration parameters
-     * 
+     *
      * @param DNPConfig
      *            Configuration
      * @throws Exception
@@ -149,7 +149,7 @@ public class User extends Thread implements InitFeatures, DataMapFeatures, AppFe
 
     /**
      * Stop all protocol processes
-     * 
+     *
      * @throws Exception
      */
     public void stopUser() throws Exception {
@@ -172,9 +172,9 @@ public class User extends Thread implements InitFeatures, DataMapFeatures, AppFe
         }
     }
 
-    public Buffer buildAnalogControlCommand(byte operateMode, int index, int value) throws Exception {
+    public Buffer buildAnalogControlCommand(byte operateMode, int index, int value, byte qualifierField) throws Exception {
         Buffer commandFrame = appSnd.buildRequestMsg(operateMode, ANALOG_OUTPUT_COMMAND, (byte) 2, new int[] { index },
-                WITH_DATA);
+                WITH_DATA, qualifierField);
 
         int previous_marker = commandFrame.length();
         byte[] valueOnBytes = toBytes(value, 2);
@@ -189,10 +189,10 @@ public class User extends Thread implements InitFeatures, DataMapFeatures, AppFe
         return commandFrame;
     }
 
-    public Buffer buildBinaryControlCommand(byte operateMode, int index, byte controlCode, int timeOn, int timeOff)
+    public Buffer buildBinaryControlCommand(byte operateMode, int index, byte controlCode, int timeOn, int timeOff, byte qualifierField)
             throws Exception {
         Buffer commandFrame = appSnd.buildRequestMsg(operateMode, BINARY_OUTPUT_COMMAND, (byte) 1, new int[] { index },
-                WITH_DATA);
+                WITH_DATA, qualifierField);
 
         int previous_marker = commandFrame.length();
 
@@ -262,7 +262,7 @@ public class User extends Thread implements InitFeatures, DataMapFeatures, AppFe
 
     /**
      * Build a time request
-     * 
+     *
      * @return a user request frame
      */
     public Buffer buildSetTimeAndDateMsg() throws Exception {
@@ -272,7 +272,7 @@ public class User extends Thread implements InitFeatures, DataMapFeatures, AppFe
     /**
      * This function is called to send a user frame to the protocol sending
      * process
-     * 
+     *
      * @param a
      *            user request frame
      * @throws Exception
