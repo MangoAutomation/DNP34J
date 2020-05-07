@@ -11,7 +11,7 @@ import br.org.scadabr.dnp34j.master.session.DNPUser;
 
 /**
  * DOCUMENT ME!
- * 
+ *
  * @author $author$
  * @version $Revision: 1.1.1.1 $
  */
@@ -73,10 +73,14 @@ public class TransportLayer implements AppFeatures, InitFeatures {
 
         while (anAppFrame.length() != 0) {
             int length = Math.min(TRANSPORT_FRAME_SIZE_MAX - 1, anAppFrame.length());
-            header = (byte) (sequence + ((sequence == 0) ? 0x40 : 0x00)
+            header = (byte) (trsLastSeq[lnkSnd.getAddressToReportTo()] + ((sequence == 0) ? 0x40 : 0x00)
                     + ((anAppFrame.length() == length) ? 0x80 : 0x00));
             pushLower(header, anAppFrame, length);
             sequence += 1;
+            trsLastSeq[lnkSnd.getAddressToReportTo()] = (byte)(trsLastSeq[lnkSnd.getAddressToReportTo()] + 1);
+            if(trsLastSeq[lnkSnd.getAddressToReportTo()] == 64) {
+                trsLastSeq[lnkSnd.getAddressToReportTo()] = 0;
+            }
         }
     }
 
@@ -142,7 +146,7 @@ public class TransportLayer implements AppFeatures, InitFeatures {
 
     /**
      * DOCUMENT ME!
-     * 
+     *
      * @param header DOCUMENT ME!
      * @param anAppFrame DOCUMENT ME!
      * @param length DOCUMENT ME!
