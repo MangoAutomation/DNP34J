@@ -11,7 +11,7 @@ import br.org.scadabr.dnp34j.master.layers.physical.PhyLayer;
 import br.org.scadabr.dnp34j.master.layers.transport.TransportLayer;
 
 /**
- * 
+ *
  * @author <a href="mailto:alexis.clerc@sysaware.com">Alexis CLERC
  *         &lt;alexis.clerc@sysaware.com&gt;</a>
  */
@@ -35,7 +35,7 @@ public class LnkSnd extends Thread implements LnkFeatures, InitFeatures {
 
     /**
      * Creates a new LnkSnd object.
-     * 
+     *
      * @param parent
      *            DOCUMENT ME!
      */
@@ -56,6 +56,7 @@ public class LnkSnd extends Thread implements LnkFeatures, InitFeatures {
     // =============================================================================
     // Waiting frames from Link Layer (confirm frames) and Transport layer (Data
     // frames)
+    @Override
     public void run() {
         try {
             while (!lnkRcv.isSTOP()) {
@@ -79,7 +80,7 @@ public class LnkSnd extends Thread implements LnkFeatures, InitFeatures {
                          * enters here if - no confirmation is expected - or a
                          * confirmation is expected and - is already received -
                          * timeout has not expired
-                         * 
+                         *
                          * -> confirmation received
                          */
                         if (lnkRcv.isLnkConfirm()) {
@@ -100,7 +101,7 @@ public class LnkSnd extends Thread implements LnkFeatures, InitFeatures {
                     /*
                      * enters here if - confirmation is expected and -
                      * timeout has expired
-                     * 
+                     *
                      * -> confirmation not received
                      */
                     if (remainingRetries > 0) {
@@ -131,7 +132,7 @@ public class LnkSnd extends Thread implements LnkFeatures, InitFeatures {
 
     /**
      * DOCUMENT ME!
-     * 
+     *
      * @param PRI
      *            DOCUMENT ME!
      * @param FC
@@ -181,8 +182,12 @@ public class LnkSnd extends Thread implements LnkFeatures, InitFeatures {
         frameSnd.getBuffer()[2] = (byte) (5 + frameRcv.length());
 
         // control field
-        frameSnd.getBuffer()[3] |= (byte) (FC + 0x40 + ((lnkRcv.getSendFcb()[addressToReportTo]) ? 0x20 : 0x00) + ((FC == CON_DATA) ? 0x10
-                : 0x00));
+        if(FC == CON_DATA || FC == TEST_LINK) {
+            frameSnd.getBuffer()[3] |= (byte) (FC + 0x40 + ((lnkRcv.getSendFcb()[addressToReportTo]) ? 0x20 : 0x00) + ((FC == CON_DATA) ? 0x10
+                    : 0x00));
+        }else {
+            frameSnd.getBuffer()[3] |= (byte) (FC + 0x40 + ((FC == CON_DATA) ? 0x10 : 0x00));
+        }
 
         // CRC field (header)
         frameSnd.writeBytes(DnpCrc.makeCRC(frameSnd.value()));
