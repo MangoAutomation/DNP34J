@@ -17,95 +17,95 @@ package br.org.scadabr.dnp34j.master.common;
  * <li>buffer parameters
  * <li>display parameters for debugging purposes
  * </ul>
- * 
+ *
  * @author <a href="mailto:alexis.clerc@sysaware.com">Alexis CLERC
  *         &lt;alexis.clerc@sysaware.com&gt;</a>
  */
 public interface InitFeatures {
 
-	/**
-	 * Serial port
-	 */
-	public int SERIAL = 1;
+    /**
+     * Serial port
+     */
+    public int SERIAL = 1;
 
-	/**
-	 * ETHERNET port
-	 */
-	public int ETHERNET = 2;
+    /**
+     * ETHERNET port
+     */
+    public int ETHERNET = 2;
 
-	/**
-	 * Buffer - medium size Recommanded for application frames with data
-	 */
-	public int M = 3000;
+    /**
+     * Buffer - medium size Recommanded for application frames with data
+     */
+    public int M = 3000;
 
-	/**
-	 * Buffer - small size Recommanded for link frames with data
-	 */
-	public int S = 500;
+    /**
+     * Buffer - small size Recommanded for link frames with data
+     */
+    public int S = 500;
 
-	/**
-	 * Buffer - extra small size Recommanded for frames without data
-	 */
-	public int XS = 20;
+    /**
+     * Buffer - extra small size Recommanded for frames without data
+     */
+    public int XS = 20;
 
-	/**
-	 * Lock object initialization attribute
-	 */
-	public boolean LOCKED = true;
+    /**
+     * Lock object initialization attribute
+     */
+    public boolean LOCKED = true;
 
-	/**
-	 * Lock object initialization attribute
-	 */
-	public boolean UNLOCKED = false;
+    /**
+     * Lock object initialization attribute
+     */
+    public boolean UNLOCKED = false;
 
-	/**
-	 * Value for unknown elements
-	 */
-	public int UNKNOWN = 4;
+    /**
+     * Value for unknown elements
+     */
+    public int UNKNOWN = 4;
 
-	/**
-	 * Value for null elements
-	 */
-	public int NULL = 0;
+    /**
+     * Value for null elements
+     */
+    public int NULL = 0;
 
-	/**
-	 * Value ON
-	 */
-	public boolean ON = true;
+    /**
+     * Value ON
+     */
+    public boolean ON = true;
 
-	/**
-	 * Value OFF
-	 */
-	public boolean OFF = false;
+    /**
+     * Value OFF
+     */
+    public boolean OFF = false;
 
-	/**
-	 * Estimated delay (ms) to restart an application
-	 */
-	public long RESTART_DELAY = 1000;
+    /**
+     * Estimated delay (ms) to restart an application
+     */
+    public long RESTART_DELAY = 1000;
 
-	/**
-	 * Hide application frames on charade/console screen For debugging purpose
-	 */
-	public boolean APP_QUIET = true;
+    /**
+     * Hide application frames on charade/console screen For debugging purpose
+     */
+    public boolean APP_QUIET = false;
 
-	/**
-	 * Hide transport frames on charade/console screen For debugging purpose
-	 */
-	public boolean TRS_QUIET = true;
+    /**
+     * Hide transport frames on charade/console screen For debugging purpose
+     */
+    public boolean TRS_QUIET = false;
 
-	/**
-	 * Hide link frames on charade/console screen For debugging purpose
-	 */
-	public boolean LNK_QUIET = true;
+    /**
+     * Hide link frames on charade/console screen For debugging purpose
+     */
+    public boolean LNK_QUIET = false;
 
-	/**
-	 * Hide database frames on charade/console screen For debugging purpose
-	 */
-	public boolean DATABASE_QUIET = true;
+    /**
+     * Hide database frames on charade/console screen For debugging purpose
+     */
+    public boolean DATABASE_QUIET = true;
 
-	/**
-	 * Hide messages of non-layer objects on charade/console screen For
-	 * debugging purpose
-	 */
-	public boolean QUIET = true;
+    /**
+     * Hide messages of non-layer objects on charade/console screen For
+     * debugging purpose
+     */
+    public boolean QUIET = true;
 }
