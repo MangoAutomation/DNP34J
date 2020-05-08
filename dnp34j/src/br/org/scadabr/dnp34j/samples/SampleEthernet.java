@@ -22,7 +22,7 @@ public class SampleEthernet {
 
         // DNPConfig config = new DNPConfig(new SerialParameters("COM2", 9600), 3,
         // 4);
-        user = new DNPUser(config, null);
+        user = new DNPUser(config, null, null);
 
         user.init();
         // 69775326259457

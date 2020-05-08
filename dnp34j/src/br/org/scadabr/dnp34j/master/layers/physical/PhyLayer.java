@@ -145,7 +145,7 @@ public class PhyLayer implements LnkFeatures, InitFeatures {
 
         try {
             while (sendingBytes.length() > 0) {
-                int size = Math.min(26, sendingBytes.length());
+                int size = sendingBytes.length();
                 try {
                     outputStream.write(sendingBytes.readBytes(size));
                     outputStream.flush();

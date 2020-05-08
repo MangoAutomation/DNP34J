@@ -30,7 +30,7 @@ public class TestReadFloat {
         configuration.setRequestTimeout(1500);
         configuration.setRequestRetries(2);
 
-        DNPUser user = new DNPUser(configuration, null);
+        DNPUser user = new DNPUser(configuration, null, null);
         user.init();
         try {
             for (int i = 0; i < 100; i++) {

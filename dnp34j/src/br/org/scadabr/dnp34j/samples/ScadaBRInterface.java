@@ -31,7 +31,7 @@ public class ScadaBRInterface {
     }
 
     private void init(DNPConfig configuration) throws Exception {
-        user = new DNPUser(configuration, null);
+        user = new DNPUser(configuration, null, null);
 
         user.init();
     }

@@ -295,4 +295,71 @@ public interface DataMapFeatures {
      * Data is not added to application frame
      */
     public boolean WITHOUT_DATA = false;
+
+    //Control status from table 11-7 page 329 of IEEE spec
+    /**
+     *  Control status: timeout
+     */
+    public int TIMEOUT = 1;
+
+    /**
+     *  Control status: need to select first
+     */
+    public int NO_SELECT = 2;
+
+    /**
+     *  Control status: format error
+     */
+    public int FORMAT_ERROR = 3;
+
+    /**
+     *  Control status: operation not supported
+     */
+    public int NOT_SUPPORTED = 4;
+
+    /**
+     *  Control status: queue full or already active
+     */
+    public int ALREADY_ACTIVE = 5;
+
+    /**
+     *  Control status: hardware problem
+     */
+    public int HARDWARE_ERROR = 6;
+
+    /**
+     *  Control status: not accepted switch in local position
+     */
+    public int LOCAL = 7;
+
+    /**
+     *  Control status: too many objects in request
+     */
+    public int TOO_MANY_OBJS = 8;
+
+    /**
+     *  Control status: not authorized
+     */
+    public int NOT_AUTHORIZED = 9;
+
+    /**
+     *  Control status: automation is prevented
+     */
+    public int AUTOMATION_INHIBIT = 10;
+
+    /**
+     *  Control status: device cannot process
+     */
+    public int PROCESSING_LIMITED = 11;
+
+    /**
+     *  Control status: value out of range
+     */
+    public int OUT_OF_RANGE = 12;
+
+    /**
+     *  Control status: will not perform
+     */
+    public int NON_PARTICIPATING = 126;
+
 }

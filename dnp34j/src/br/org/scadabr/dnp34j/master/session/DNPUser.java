@@ -6,6 +6,7 @@ import br.org.scadabr.dnp34j.master.common.AppFeatures;
 import br.org.scadabr.dnp34j.master.common.DataMapFeatures;
 import br.org.scadabr.dnp34j.master.common.DataObject;
 import br.org.scadabr.dnp34j.master.common.InitFeatures;
+import br.org.scadabr.dnp34j.master.common.InternalIndication;
 import br.org.scadabr.dnp34j.master.common.utils.Buffer;
 import br.org.scadabr.dnp34j.master.common.utils.Lock;
 import br.org.scadabr.dnp34j.master.layers.application.AppRcv;
@@ -31,10 +32,12 @@ public class DNPUser implements InitFeatures, DataMapFeatures, AppFeatures {
     private Database database;
     private DNPConfig config;
     private Consumer<Exception> exceptionHandler;
+    private Consumer<InternalIndication> iinHandler;
 
-    public DNPUser(DNPConfig config, Consumer<Exception> exceptionHandler) {
+    public DNPUser(DNPConfig config, Consumer<Exception> exceptionHandler, Consumer<InternalIndication> iinHandler) {
         this.config = config;
         this.exceptionHandler = exceptionHandler;
+        this.iinHandler = iinHandler;
     }
 
     public void init() throws Exception {
@@ -256,5 +259,18 @@ public class DNPUser implements InitFeatures, DataMapFeatures, AppFeatures {
         if(exceptionHandler != null) {
             exceptionHandler.accept(e);
         }
+    }
+
+    /**
+     * @param internalIndication
+     */
+    public void notifyInternalIndication(InternalIndication internalIndication) {
+        if(iinHandler != null) {
+            iinHandler.accept(internalIndication);
+        }
+    }
+
+    public byte getApplicationLayerSequence() {
+        return appRcv.getAppLastSeq();
     }
 }

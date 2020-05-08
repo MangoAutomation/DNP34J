@@ -13,6 +13,7 @@ public class DataElement implements DataMapFeatures {
     private long timestamp;
     private int quality;
     private Object value;
+    private byte controlStatus;
 
     public int getIndex() {
         return index;
@@ -68,6 +69,14 @@ public class DataElement implements DataMapFeatures {
 
     public void setValue(Object value) {
         this.value = value;
+    }
+
+    public byte getControlStatus() {
+        return controlStatus;
+    }
+
+    public void setControlStatus(byte controlStatus) {
+        this.controlStatus = controlStatus;
     }
 
     /**
@@ -292,23 +301,23 @@ public class DataElement implements DataMapFeatures {
     }
 
     public boolean isOnline() {
-        return (((byte)quality) & 0b00000001) == 1;
+        return (((byte)quality) & 0b00000001) > 0;
     }
 
     public boolean isRestart() {
-        return (((byte)quality) & 0b00000010) == 1;
+        return (((byte)quality) & 0b00000010) > 0;
     }
 
     public boolean isCommsLost() {
-        return (((byte)quality) & 0b00000100) == 1;
+        return (((byte)quality) & 0b00000100) > 0;
     }
 
     public boolean isRemoteForced() {
-        return (((byte)quality) & 0b00001000) == 1;
+        return (((byte)quality) & 0b00001000) > 0;
     }
 
     public boolean isLocalForced() {
-        return (((byte)quality) & 0b00010000) == 1;
+        return (((byte)quality) & 0b00010000) > 0;
     }
 
     /**
@@ -316,7 +325,7 @@ public class DataElement implements DataMapFeatures {
      * @return
      */
     public boolean isOverRange() {
-        return (((byte)quality) & 0b00100000) == 1;
+        return (((byte)quality) & 0b00100000) > 0;
     }
 
     /**
@@ -324,7 +333,7 @@ public class DataElement implements DataMapFeatures {
      * @return
      */
     public boolean isReferenceError() {
-        return (((byte)quality) & 0b01000000) == 1;
+        return (((byte)quality) & 0b01000000) > 0;
     }
 
     /**
@@ -332,7 +341,7 @@ public class DataElement implements DataMapFeatures {
      * @return
      */
     public boolean isRollover() {
-        return (((byte)quality) & 0b00100000) == 1;
+        return (((byte)quality) & 0b00100000) > 0;
     }
 
     /**
@@ -340,7 +349,7 @@ public class DataElement implements DataMapFeatures {
      * @return
      */
     public boolean isDiscontinuity() {
-        return (((byte)quality) & 0b01000000) == 1;
+        return (((byte)quality) & 0b01000000) > 0;
     }
 
     /**
@@ -348,7 +357,64 @@ public class DataElement implements DataMapFeatures {
      * @return
      */
     public boolean isChatterFilter() {
-        return (((byte)quality) & 0b00100000) == 1;
+        return (((byte)quality) & 0b00100000) > 0;
+    }
+
+    //Control status fields
+    public boolean isTimeout() {
+        return controlStatus == 1;
+    }
+
+    public boolean noSelect() {
+        return controlStatus == 2;
+    }
+
+    public boolean formatError() {
+        return controlStatus == 3;
+    }
+
+    public boolean notSupported() {
+        return controlStatus == 4;
+    }
+
+    public boolean alreadyActive() {
+        return controlStatus == 5;
+    }
+
+    public boolean hardwareError() {
+        return controlStatus == 6;
+    }
+
+    public boolean localMode() {
+        return controlStatus == 7;
+    }
+
+    public boolean tooManyObjects() {
+        return controlStatus == 8;
+    }
+
+    public boolean notAuthorized() {
+        return controlStatus == 9;
+    }
+
+    public boolean automationInhibit() {
+        return controlStatus == 10;
+    }
+
+    public boolean processingLimited() {
+        return controlStatus == 11;
+    }
+
+    public boolean outOfRange() {
+        return controlStatus == 12;
+    }
+
+    public boolean notParticipating() {
+        return controlStatus == 126;
+    }
+
+    public boolean hasControlStatus() {
+        return controlStatus > 0;
     }
 
     @Override

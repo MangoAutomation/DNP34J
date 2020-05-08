@@ -5,6 +5,7 @@ import br.org.scadabr.dnp34j.master.common.DataLengths;
 import br.org.scadabr.dnp34j.master.common.DataMapFeatures;
 import br.org.scadabr.dnp34j.master.common.DataObject;
 import br.org.scadabr.dnp34j.master.common.InitFeatures;
+import br.org.scadabr.dnp34j.master.common.InternalIndication;
 import br.org.scadabr.dnp34j.master.common.utils.Buffer;
 import br.org.scadabr.dnp34j.master.common.utils.Lock;
 import br.org.scadabr.dnp34j.master.common.utils.Queue;
@@ -58,7 +59,7 @@ public class AppRcv extends Thread implements AppFeatures, InitFeatures, DataMap
     private TransportLayer transportLayer;
     private byte appLastSeq;
     private boolean appFirstFrame;
-    private byte[] iin;
+    private final InternalIndication iin;
     private byte AC;
     private byte FC;
     private byte UNS;
@@ -85,7 +86,7 @@ public class AppRcv extends Thread implements AppFeatures, InitFeatures, DataMap
 
         appFirstFrame = true;
         appLastSeq = 0;
-        iin = new byte[2];
+        iin = new InternalIndication();
         frameRcv = new Buffer(M);
 
         transportLayer = user.getTranspLayer();
@@ -131,8 +132,8 @@ public class AppRcv extends Thread implements AppFeatures, InitFeatures, DataMap
         frameRcv.writeBytes(anAppFrame);
         AC = frameRcv.readByte();
         FC = frameRcv.readByte();
-        iin[0] = frameRcv.readByte();
-        iin[1] = frameRcv.readByte();
+        iin.setIin1(frameRcv.readByte());
+        iin.setIin2(frameRcv.readByte());
         frameRcv.decrOffset(4);
 
         // compliance
@@ -145,6 +146,12 @@ public class AppRcv extends Thread implements AppFeatures, InitFeatures, DataMap
 
         if (FC == UNSOLICITED_RESPONSE)
             System.out.println("Unsolicited Message!");
+
+
+        //Check internal indication
+        if(iin.shouldNotify()) {
+            user.notifyInternalIndication(new InternalIndication(iin.getIin1(), iin.getIin2(), appLastSeq));
+        }
 
         // handle a confirm or a response msg
         if (FC == CONFIRM) {
@@ -207,7 +214,7 @@ public class AppRcv extends Thread implements AppFeatures, InitFeatures, DataMap
                 updateDatamap(new Buffer(M, frameRcv.value()));
             }
             catch (Exception e) {
-                e.printStackTrace();
+                user.reportException(e);
             }
         }
 
@@ -597,16 +604,8 @@ public class AppRcv extends Thread implements AppFeatures, InitFeatures, DataMap
     /**
      * @return the iin
      */
-    public byte[] getIin() {
+    public InternalIndication getIin() {
         return iin;
-    }
-
-    /**
-     * @param iin
-     *            the iin to set
-     */
-    public void setIin(byte[] iin) {
-        this.iin = iin;
     }
 
     /**

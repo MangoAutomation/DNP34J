@@ -231,6 +231,14 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                         break;
                 }
                 break;
+            case BINARY_OUTPUT_COMMAND:
+                switch(variation) {
+                    case 1:
+                    case 2:
+                        rec.setControlStatus(data[10]);
+                        break;
+                }
+                break;
             case COUNTER_STATIC:
                 //Counters
                 switch(variation) {
@@ -658,6 +666,22 @@ public class DataMap implements DataMapFeatures, InitFeatures {
                     default:
                         break;
                 }
+            case ANALOG_OUTPUT_COMMAND:
+                switch(variation) {
+                    case 1:
+                        rec.setControlStatus(data[4]);
+                        break;
+                    case 2:
+                        rec.setControlStatus(data[2]);
+                        break;
+                    case 3:
+                        rec.setControlStatus(data[4]);
+                        break;
+                    case 4:
+                        rec.setControlStatus(data[8]);
+                        break;
+                }
+                break;
             default:break;
         }
 
