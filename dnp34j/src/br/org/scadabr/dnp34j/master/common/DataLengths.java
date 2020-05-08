@@ -71,9 +71,9 @@ public class DataLengths implements DataMapFeatures {
             case BINARY_OUTPUT_COMMAND:
                 switch(variation) {
                     case 1:
-                        return 72;
+                        return 88;
                     case 2:
-                        return 72;
+                        return 88;
                     default:
                         break;
                 }
