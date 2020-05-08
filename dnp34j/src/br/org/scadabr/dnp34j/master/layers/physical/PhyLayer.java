@@ -1,6 +1,5 @@
 package br.org.scadabr.dnp34j.master.layers.physical;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -146,16 +145,10 @@ public class PhyLayer implements LnkFeatures, InitFeatures {
         try {
             while (sendingBytes.length() > 0) {
                 int size = sendingBytes.length();
-                try {
-                    outputStream.write(sendingBytes.readBytes(size));
-                    outputStream.flush();
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    if (DEBUG) {
-                        System.out.println("[PhyLayer] outPut down");
-                    }
-                }
+                outputStream.write(sendingBytes.readBytes(size));
+                outputStream.flush();
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             if (DEBUG) {
                 System.out.println("[PhyLayer] Writing Exception");
                 System.out.println("[PhyLayer] Remote Connection closed.");
