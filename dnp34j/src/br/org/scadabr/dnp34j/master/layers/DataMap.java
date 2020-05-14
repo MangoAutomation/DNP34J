@@ -81,7 +81,8 @@ public class DataMap implements DataMapFeatures, InitFeatures {
             return;
         }
 
-        if (DataLengths.getDataLength(group, variation) == 1 || DataLengths.isBitString(group, variation)) {
+        //This is
+        if (DataLengths.isBitString(group, variation)) {
             setBits(group, variation, start, stop, newDataObjects);
         } else {
             setBytes(group, variation, start, stop, newDataObjects);
@@ -90,6 +91,9 @@ public class DataMap implements DataMapFeatures, InitFeatures {
 
 
     /**
+     *
+     * For example usage see IEEE Std 1815-2012 Object group1: binary inputs Variation 1
+     *
      * Set bits objects of a group/variation. Return a copy of data joined in the request Range :
      * [index[start], index[start+1], ... ,index[stop]]
      *
@@ -102,21 +106,27 @@ public class DataMap implements DataMapFeatures, InitFeatures {
      * @return a range of Data Objects
      */
     private void setBits(byte group, byte variation, int start, int stop, byte[] newDataObjects) {
-        byte[] newDO = new byte[1];
+
+        //Find start bit (possibly larger than 1 byte)
+        int bitLocation = stop - start;
+        if(bitLocation > 7) {
+            bitLocation = 7;
+        }
 
         // for each byte
         for (int i = 0; i < newDataObjects.length; i++) {
-            // for each bit in this byte
-            for (int j = 0; j < 8; j++) {
+            // for each used bit in this byte
+            while(bitLocation >= 0) {
                 // index
-                int index = start + (i * 8) + j;
+                int index = start + (i * 8) + bitLocation;
 
                 if (stop < index) {
                     break;
                 }
-
-                newDO[0] = (byte) ((newDataObjects[i] << (7 - j)) & 0x80);
+                byte[] newDO = new byte[1];
+                newDO[0] = (byte) ((newDataObjects[i] >> bitLocation) & 0x01);
                 setDB(index, newDO, group, variation);
+                bitLocation--;
             }
         }
     }

@@ -48,7 +48,7 @@ public class DataLengths implements DataMapFeatures {
                 switch(variation) {
                     case 1:
                         //Single bit of data
-                        return 1;
+                        return 8;
                     case 2:
                         //Bit with Flag
                         return 8;
@@ -453,7 +453,7 @@ public class DataLengths implements DataMapFeatures {
             case CLASS_STATIC:
                 return 0;
             case IIN_STATIC:
-                return 1;
+                return 16;
             default:break;
         }
         return -1;
