@@ -13,17 +13,17 @@ public class DataLengths implements DataMapFeatures {
 
     /**
      * Get the expected data length in bits for a given group and variation of data types
+     *
      * @param group
      * @param variation
-     * @return length in bits, 0 if there is no coding or < 0 if not supported.  Or 0 if there is no
+     * @return length in bits or -1 if not known/supported
      */
     public static int getDataLength(byte group, byte variation) {
         switch(group) {
             case BINARY_INPUT_STATIC:
                 switch(variation) {
                     case 1:
-                        //variable length
-                        return 8;
+                        return 1;
                     case 2:
                         //Bit with Flag
                         return 8;
@@ -47,8 +47,7 @@ public class DataLengths implements DataMapFeatures {
             case BINARY_OUTPUT_STATIC:
                 switch(variation) {
                     case 1:
-                        //Single bit of data
-                        return 8;
+                        return 1;
                     case 2:
                         //Bit with Flag
                         return 8;

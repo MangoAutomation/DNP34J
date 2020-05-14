@@ -255,6 +255,7 @@ public class AppRcv extends Thread implements AppFeatures, InitFeatures, DataMap
             byte group = aFrame.readByte();
             byte variation = aFrame.readByte();
             byte qualField = aFrame.readByte();
+
             int dataLength = DataLengths.getDataLength(group, variation);
 
             // nao suportada e nao descartavel!

@@ -106,27 +106,24 @@ public class DataMap implements DataMapFeatures, InitFeatures {
      * @return a range of Data Objects
      */
     private void setBits(byte group, byte variation, int start, int stop, byte[] newDataObjects) {
+        byte[] newDO = new byte[1];
 
-        //Find start bit (possibly larger than 1 byte)
-        int bitLocation = stop - start;
-        if(bitLocation > 7) {
-            bitLocation = 7;
+        if(stop - start > newDataObjects.length * 8) {
+            throw new RuntimeException("Invalid data format for bit string");
         }
 
-        // for each byte
-        for (int i = 0; i < newDataObjects.length; i++) {
-            // for each used bit in this byte
-            while(bitLocation >= 0) {
-                // index
-                int index = start + (i * 8) + bitLocation;
-
-                if (stop < index) {
-                    break;
-                }
-                byte[] newDO = new byte[1];
-                newDO[0] = (byte) ((newDataObjects[i] >> bitLocation) & 0x01);
-                setDB(index, newDO, group, variation);
-                bitLocation--;
+        //Scale to be bit in highest byte
+        int index = start;
+        int bitLocation = stop - newDataObjects.length * 8;
+        int byteNumber = 0;
+        while(index <= stop) {
+            newDO[0] = (byte) ((newDataObjects[byteNumber] >> bitLocation) & 0x01);
+            setDB(index, newDO, group, variation);
+            index++;
+            bitLocation++;
+            if(bitLocation > 7) {
+                byteNumber++;
+                bitLocation = 0;
             }
         }
     }
