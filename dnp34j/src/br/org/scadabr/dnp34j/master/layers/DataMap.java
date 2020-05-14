@@ -81,12 +81,13 @@ public class DataMap implements DataMapFeatures, InitFeatures {
             return;
         }
 
-        if (DataLengths.getDataLength(group, variation) == 1) {
+        if (DataLengths.getDataLength(group, variation) == 1 || DataLengths.isBitString(group, variation)) {
             setBits(group, variation, start, stop, newDataObjects);
         } else {
             setBytes(group, variation, start, stop, newDataObjects);
         }
     }
+
 
     /**
      * Set bits objects of a group/variation. Return a copy of data joined in the request Range :

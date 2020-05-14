@@ -22,8 +22,8 @@ public class DataLengths implements DataMapFeatures {
             case BINARY_INPUT_STATIC:
                 switch(variation) {
                     case 1:
-                        //Single bit of data
-                        return 1;
+                        //variable length
+                        return 8;
                     case 2:
                         //Bit with Flag
                         return 8;
@@ -457,6 +457,33 @@ public class DataLengths implements DataMapFeatures {
             default:break;
         }
         return -1;
+    }
+
+    /**
+     * Is this group/variation a packed bit string where each bit represents the state of an index
+     * @param group
+     * @param variation
+     * @return
+     */
+    public static boolean isBitString(byte group, byte variation) {
+        switch(group) {
+            case BINARY_INPUT_STATIC:
+                switch(variation) {
+                    case 1:
+                        return true;
+                    default:
+                        return false;
+                }
+            case BINARY_OUTPUT_STATIC:
+                switch(variation) {
+                    case 1:
+                        return true;
+                    default:
+                        return false;
+                }
+            default:
+                return false;
+        }
     }
 
 }
