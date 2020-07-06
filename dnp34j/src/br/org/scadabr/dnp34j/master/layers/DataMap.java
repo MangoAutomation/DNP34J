@@ -114,7 +114,7 @@ public class DataMap implements DataMapFeatures, InitFeatures {
 
         //Scale to be bit in highest byte
         int index = start;
-        int bitLocation = stop - newDataObjects.length * 8;
+        int bitLocation = 0;
         int byteNumber = 0;
         while(index <= stop) {
             newDO[0] = (byte) ((newDataObjects[byteNumber] >> bitLocation) & 0x01);
