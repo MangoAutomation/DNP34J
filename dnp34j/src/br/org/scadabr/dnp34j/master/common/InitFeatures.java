@@ -83,29 +83,4 @@ public interface InitFeatures {
      */
     public long RESTART_DELAY = 1000;
 
-    /**
-     * Hide application frames on charade/console screen For debugging purpose
-     */
-    public boolean APP_QUIET = false;
-
-    /**
-     * Hide transport frames on charade/console screen For debugging purpose
-     */
-    public boolean TRS_QUIET = false;
-
-    /**
-     * Hide link frames on charade/console screen For debugging purpose
-     */
-    public boolean LNK_QUIET = false;
-
-    /**
-     * Hide database frames on charade/console screen For debugging purpose
-     */
-    public boolean DATABASE_QUIET = true;
-
-    /**
-     * Hide messages of non-layer objects on charade/console screen For
-     * debugging purpose
-     */
-    public boolean QUIET = true;
 }

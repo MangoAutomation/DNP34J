@@ -9,6 +9,9 @@
  */
 package br.org.scadabr.dnp34j.master.common.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.org.scadabr.dnp34j.master.common.InitFeatures;
 
 /**
@@ -26,7 +29,8 @@ import br.org.scadabr.dnp34j.master.common.InitFeatures;
  *         &lt;alexis.clerc@sysaware.com&gt;</a>
  */
 public class Buffer implements InitFeatures {
-	static final boolean DEBUG = !QUIET;
+
+	private static final Logger LOG = LoggerFactory.getLogger(Buffer.class);
 
 	// =============================================================================
 	// Attributes
@@ -131,15 +135,14 @@ public class Buffer implements InitFeatures {
 	 */
 	public void incrOffset(int length) {
 		if (length > size) {
-			if (DEBUG) {
-				System.out.println("[Buffer] WARNING : incrOffset too large");
+			if(LOG.isDebugEnabled()) {
+				LOG.debug("[Buffer] WARNING : incrOffset too large");
 			}
 		}
 
 		if (length > length()) {
-			if (DEBUG) {
-				System.out
-						.println("[Buffer] ERROR : incrOffset -> offset overflow");
+			if(LOG.isDebugEnabled()) {
+				LOG.debug("[Buffer] ERROR : incrOffset -> offset overflow");
 			}
 		}
 
@@ -236,9 +239,8 @@ public class Buffer implements InitFeatures {
 	 */
 	public byte readByte() {
 		if (length() == 0) {
-			if (DEBUG) {
-				System.out
-						.println("[Buffer] ERROR : readByte -> nothing to read");
+			if(LOG.isDebugEnabled()) {
+				LOG.debug("[Buffer] ERROR : readByte -> nothing to read");
 			}
 		}
 

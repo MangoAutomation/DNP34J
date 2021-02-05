@@ -6,7 +6,11 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.org.scadabr.dnp34j.master.common.InitFeatures;
+import br.org.scadabr.dnp34j.master.layers.DataMap;
 
 /**
  * DOCUMENT ME!
@@ -15,7 +19,7 @@ import br.org.scadabr.dnp34j.master.common.InitFeatures;
  * @version $Revision: 1.1.1.1 $
  */
 public class PhyETHERNET implements InitFeatures {
-    static final boolean DEBUG = !LNK_QUIET;
+    private static final Logger LOG = LoggerFactory.getLogger(PhyETHERNET.class);
 
     // =============================================================================
     // Attributes
@@ -60,28 +64,28 @@ public class PhyETHERNET implements InitFeatures {
 
         boolean connectionAccepted = false;
 
-        if (DEBUG) {
-            System.out.println("Trying to connect to:");
-            System.out.println("http://" + host + ":" + port);
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("Trying to connect to:");
+            LOG.debug("http://" + host + ":" + port);
         }
 
         socket = new Socket(host, port);
 
-        if (DEBUG) {
-            System.out.println("Created socket:");
-            System.out.println(socket);
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("Created socket:");
+            LOG.debug(socket.toString());
         }
         while (!connectionAccepted) {
             connectionAccepted = true;
 
-            if (DEBUG) {
-                System.out.println("[PhyLayer] Attempting to connect "
+            if(LOG.isDebugEnabled()) {
+                LOG.debug("[PhyLayer] Attempting to connect "
                         + phyLayer.getUri());
             }
         }
 
-        if (DEBUG) {
-            System.out.println("[PhyLayer] Connected to " + phyLayer.getUri());
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("[PhyLayer] Connected to " + phyLayer.getUri());
         }
 
         setOutputStream(socket.getOutputStream());

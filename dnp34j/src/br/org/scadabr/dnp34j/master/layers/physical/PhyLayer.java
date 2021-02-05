@@ -4,9 +4,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.org.scadabr.dnp34j.master.common.InitFeatures;
 import br.org.scadabr.dnp34j.master.common.LnkFeatures;
 import br.org.scadabr.dnp34j.master.common.utils.Buffer;
+import br.org.scadabr.dnp34j.master.layers.DataMap;
 import br.org.scadabr.dnp34j.master.layers.link.LnkRcv;
 import br.org.scadabr.dnp34j.master.session.DNPUser;
 import br.org.scadabr.dnp34j.master.session.config.DNPConfig;
@@ -23,7 +27,8 @@ import br.org.scadabr.dnp34j.serial.SerialPortWrapper;
  *         &lt;alexis.clerc@sysaware.com&gt;</a>
  */
 public class PhyLayer implements LnkFeatures, InitFeatures {
-    static final boolean DEBUG = !LNK_QUIET;
+
+    private static final Logger LOG = LoggerFactory.getLogger(PhyLayer.class);
 
     // =============================================================================
     // Attributes
@@ -149,9 +154,9 @@ public class PhyLayer implements LnkFeatures, InitFeatures {
                 outputStream.flush();
             }
         } catch (Exception e) {
-            if (DEBUG) {
-                System.out.println("[PhyLayer] Writing Exception");
-                System.out.println("[PhyLayer] Remote Connection closed.");
+            if(LOG.isDebugEnabled()) {
+                LOG.debug("[PhyLayer] Writing Exception");
+                LOG.debug("[PhyLayer] Remote Connection closed.");
             }
             user.reportException(e);
         }
@@ -222,7 +227,7 @@ public class PhyLayer implements LnkFeatures, InitFeatures {
     }
 
     /**
-     * @param comm the comm to set
+     * @param commType the comm to set
      */
     public void setCommType(int commType) {
         this.commType = commType;

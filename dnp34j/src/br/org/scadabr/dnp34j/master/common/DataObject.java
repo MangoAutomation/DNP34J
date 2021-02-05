@@ -20,7 +20,8 @@ import br.org.scadabr.dnp34j.master.common.utils.Utils;
  * @author Alexis CLERC
  */
 public class DataObject implements InitFeatures, DataMapFeatures {
-    static final boolean DEBUG = !DATABASE_QUIET;
+
+
 
     /**
      * Object group
@@ -169,7 +170,6 @@ public class DataObject implements InitFeatures, DataMapFeatures {
      * Convert to short from bytes
      * @param byteArray
      * @param offset
-     * @param len
      * @return
      */
     public static final short toShort(byte[] byteArray, int offset) {
@@ -185,7 +185,6 @@ public class DataObject implements InitFeatures, DataMapFeatures {
      * Convert to int from bytes
      * @param byteArray
      * @param offset
-     * @param len
      * @return
      */
     public static final int toInt(byte[] byteArray, int offset) {
@@ -201,7 +200,6 @@ public class DataObject implements InitFeatures, DataMapFeatures {
      * Convert to long time from 6 bytes
      * @param byteArray
      * @param offset
-     * @param len
      * @return
      */
     public static final long toTime(byte[] byteArray, int offset) {

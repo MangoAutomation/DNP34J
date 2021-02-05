@@ -1,5 +1,8 @@
 package br.org.scadabr.dnp34j.master.layers.application;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.org.scadabr.dnp34j.master.common.AppFeatures;
 import br.org.scadabr.dnp34j.master.common.DataMapFeatures;
 import br.org.scadabr.dnp34j.master.common.DataObject;
@@ -8,6 +11,7 @@ import br.org.scadabr.dnp34j.master.common.utils.Buffer;
 import br.org.scadabr.dnp34j.master.common.utils.Lock;
 import br.org.scadabr.dnp34j.master.common.utils.Queue;
 import br.org.scadabr.dnp34j.master.common.utils.Utils;
+import br.org.scadabr.dnp34j.master.layers.DataMap;
 import br.org.scadabr.dnp34j.master.layers.transport.TransportLayer;
 import br.org.scadabr.dnp34j.master.session.DNPUser;
 import br.org.scadabr.dnp34j.master.session.config.DNPConfig;
@@ -19,7 +23,7 @@ import br.org.scadabr.dnp34j.master.session.config.DNPConfig;
  */
 public class AppSnd extends Thread implements AppFeatures, InitFeatures,
 DataMapFeatures {
-    static final boolean DEBUG = !APP_QUIET;
+    private static final Logger LOG = LoggerFactory.getLogger(AppSnd.class);
 
     // =============================================================================
     // Attributes
@@ -356,8 +360,8 @@ DataMapFeatures {
         // transmit this application frame to transport layer
         transportLayer.buildTransportMsg(frameRcv);
 
-        if (DEBUG) {
-            System.out.println("[ApplicationLayer] Sending frame"
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("[ApplicationLayer] Sending frame"
                     + Utils.Display(frameRcv.value()));
         }
 

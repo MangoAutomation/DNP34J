@@ -3,7 +3,11 @@ package br.org.scadabr.dnp34j.master.layers.physical;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.org.scadabr.dnp34j.master.common.InitFeatures;
+import br.org.scadabr.dnp34j.master.layers.DataMap;
 import br.org.scadabr.dnp34j.serial.SerialPortWrapper;
 
 /**
@@ -13,7 +17,6 @@ import br.org.scadabr.dnp34j.serial.SerialPortWrapper;
  * @version $Revision: 1.1.1.1 $
  */
 public class PhySERIAL implements InitFeatures {
-    static final boolean DEBUG = !LNK_QUIET;
 
     // =============================================================================
     // Attributes

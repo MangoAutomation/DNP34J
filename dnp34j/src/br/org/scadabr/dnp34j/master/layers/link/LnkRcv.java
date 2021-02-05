@@ -2,11 +2,15 @@ package br.org.scadabr.dnp34j.master.layers.link;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.org.scadabr.dnp34j.master.common.InitFeatures;
 import br.org.scadabr.dnp34j.master.common.LnkFeatures;
 import br.org.scadabr.dnp34j.master.common.utils.Buffer;
 import br.org.scadabr.dnp34j.master.common.utils.DnpCrc;
 import br.org.scadabr.dnp34j.master.common.utils.Utils;
+import br.org.scadabr.dnp34j.master.layers.DataMap;
 import br.org.scadabr.dnp34j.master.layers.ThreadStopException;
 import br.org.scadabr.dnp34j.master.layers.physical.PhyLayer;
 import br.org.scadabr.dnp34j.master.layers.transport.TransportLayer;
@@ -21,7 +25,8 @@ import br.org.scadabr.dnp34j.master.session.config.DNPConfig;
 public class LnkRcv extends Thread implements LnkFeatures, InitFeatures {
     private static final int DATA_PAUSE_TIME = 20; // milliseconds
 
-    static final boolean DEBUG = !LNK_QUIET;
+    private static final Logger LOG = LoggerFactory.getLogger(LnkRcv.class);
+
     private volatile boolean STOP = false;
 
     // =============================================================================
@@ -142,8 +147,8 @@ public class LnkRcv extends Thread implements LnkFeatures, InitFeatures {
             init();
         }
 
-        if (DEBUG) {
-            System.out.println("[LinkLayer] initialized");
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("[LinkLayer] initialized");
         }
     }
 
@@ -199,15 +204,15 @@ public class LnkRcv extends Thread implements LnkFeatures, InitFeatures {
                     break;
                 }
 
-                if (DEBUG) {
-                    System.out.println("[LinkLayer] received " + Utils.Display(frameRcv.value()));
+                if(LOG.isDebugEnabled()) {
+                    LOG.debug("[LinkLayer] received " + Utils.Display(frameRcv.value()));
                 }
 
                 // header CRC check
                 error = !DnpCrc.checkCRC(frameRcv.value(0, 9));
 
-                if (DEBUG && error) {
-                    System.out.println("[LinkLayer] error header CRC check");
+                if (LOG.isDebugEnabled() && error) {
+                    LOG.debug("[LinkLayer] error header CRC check");
                 }
 
                 if (rightAddress()) {
@@ -321,8 +326,8 @@ public class LnkRcv extends Thread implements LnkFeatures, InitFeatures {
 
         if ((frameRcv.value(4) != ADDRESS_0) || (frameRcv.value(5) != ADDRESS_1)) // wrong address
         {
-            if (DEBUG) {
-                System.out.println("[LinkLayer] dest address doesn't match");
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("[LinkLayer] dest address doesn't match");
             }
 
             return false;
@@ -350,16 +355,16 @@ public class LnkRcv extends Thread implements LnkFeatures, InitFeatures {
         // i receive a message FROM PRIMARY
         // check if its a duplicate frame
         if (((control & 0x10) == 0x10) && (((control & 0x20) == 0x20) == receiveFcb[currentRemoteStation])) {
-            if (DEBUG) {
-                System.out.println("[LinkLayer] duplicate frame");
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("[LinkLayer] duplicate frame");
             }
         }
 
         // handle this frame
         switch ((byte) (control & 0x0F)) {
         case RESET_LINK: {
-            if (DEBUG) {
-                System.out.println("[LinkLayer] i send a confirm LPDU : " + !error);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("[LinkLayer] i send a confirm LPDU : " + !error);
             }
 
             sendSecondaryMsg((error) ? NACK : ACK);
@@ -398,8 +403,8 @@ public class LnkRcv extends Thread implements LnkFeatures, InitFeatures {
 
             // check if a confirmation is requiered
             if ((control & 0x0F) < 4) {
-                if (DEBUG) {
-                    System.out.println("[LinkLayer] i send a confirm LPDU : " + !error);
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("[LinkLayer] i send a confirm LPDU : " + !error);
                 }
 
                 sendSecondaryMsg((error) ? NACK : ACK);
@@ -431,8 +436,8 @@ public class LnkRcv extends Thread implements LnkFeatures, InitFeatures {
     private void secondaryHandler() throws Exception {
         // i'm primary
         // i receive a message FROM SECONDARY
-        if (DEBUG) {
-            System.out.println("[LinkLayer] Receive confirm message");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("[LinkLayer] Receive confirm message");
         }
 
         if (error || ((control & 0x10) == 0x10)) // Data Flow Control bit
@@ -511,8 +516,8 @@ public class LnkRcv extends Thread implements LnkFeatures, InitFeatures {
      * DOCUMENT ME!
      */
     public void handleConnectionError() throws Exception {
-        if (DEBUG) {
-            System.out.println("[LinkLayer] run() : Remote Connection closed.");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("[LinkLayer] run() : Remote Connection closed.");
         }
 
         // if (!STOP) {

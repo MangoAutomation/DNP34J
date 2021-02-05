@@ -9,6 +9,9 @@
  */
 package br.org.scadabr.dnp34j.master.layers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.org.scadabr.dnp34j.master.common.AppFeatures;
 import br.org.scadabr.dnp34j.master.common.DataMapFeatures;
 import br.org.scadabr.dnp34j.master.common.InitFeatures;
@@ -29,7 +32,9 @@ import br.org.scadabr.dnp34j.master.layers.link.LnkSnd;
  *         &lt;alexis.clerc@sysaware.com&gt;</a>
  */
 public class User extends Thread implements InitFeatures, DataMapFeatures, AppFeatures {
-    private static final boolean DEBUG = !APP_QUIET;
+
+    private static final Logger LOG = LoggerFactory.getLogger(User.class);
+
     private boolean STOP = false;
     /**
      * Current Configuration
@@ -115,8 +120,6 @@ public class User extends Thread implements InitFeatures, DataMapFeatures, AppFe
     /**
      * Initialize user parameters with Configuration parameters
      *
-     * @param DNPConfig
-     *            Configuration
      * @throws Exception
      */
     public void init() throws Exception {
@@ -142,8 +145,8 @@ public class User extends Thread implements InitFeatures, DataMapFeatures, AppFe
 
         appRcv.start();
 
-        if (DEBUG) {
-            System.out.println("[UserLayer] initialized");
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("[UserLayer] initialized");
         }
     }
 
@@ -273,13 +276,13 @@ public class User extends Thread implements InitFeatures, DataMapFeatures, AppFe
      * This function is called to send a user frame to the protocol sending
      * process
      *
-     * @param a
+     * @param aFrame
      *            user request frame
      * @throws Exception
      */
     public synchronized void send(Buffer aFrame) throws Exception {
-        if (DEBUG) {
-            System.out.println("[UserLayer] push APDU " + Utils.Display(aFrame.value()));
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("[UserLayer] push APDU " + Utils.Display(aFrame.value()));
         }
 
         userRcvLock.lock();

@@ -1,5 +1,8 @@
 package br.org.scadabr.dnp34j.master.layers.application;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.org.scadabr.dnp34j.master.common.AppFeatures;
 import br.org.scadabr.dnp34j.master.common.DataLengths;
 import br.org.scadabr.dnp34j.master.common.DataMapFeatures;
@@ -38,7 +41,9 @@ import br.org.scadabr.dnp34j.master.session.config.DNPConfig;
  * @author <a href="mailto:alexis.clerc@sysaware.com">Alexis CLERC</a>
  */
 public class AppRcv extends Thread implements AppFeatures, InitFeatures, DataMapFeatures {
-    static final boolean DEBUG = !APP_QUIET;
+
+    private static final Logger LOG = LoggerFactory.getLogger(AppRcv.class);
+
     private boolean STOP = false;
 
     // =============================================================================
@@ -91,8 +96,8 @@ public class AppRcv extends Thread implements AppFeatures, InitFeatures, DataMap
 
         transportLayer = user.getTranspLayer();
         dataMap = new DataMap(user);
-        if (DEBUG) {
-            System.out.println("[ApplicationLayer] initialized");
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("[ApplicationLayer] initialized");
         }
     }
 
@@ -110,8 +115,8 @@ public class AppRcv extends Thread implements AppFeatures, InitFeatures, DataMap
 
                 appRcvLock.lock();
 
-                if (DEBUG) {
-                    System.out.println("[ApplicationLayer] frame from TransportLayer !");
+                if(LOG.isDebugEnabled()) {
+                    LOG.debug("[ApplicationLayer] frame from TransportLayer !");
                 }
                 handle(appRcvBuffer.readBytes(appRcvQueue.pop()));
             }
@@ -138,9 +143,9 @@ public class AppRcv extends Thread implements AppFeatures, InitFeatures, DataMap
 
         // compliance
         if ((AC & 0x0F) != appLastSeq) {
-            if (DEBUG) {
-                System.out.println("[ApplicationLayer] ERROR : doesn't match with the message expected");
-                System.out.println("[ApplicationLayer] ERROR : number expected : " + appLastSeq);
+            if(LOG.isDebugEnabled()) {
+                LOG.debug("[ApplicationLayer] ERROR : doesn't match with the message expected");
+                LOG.debug("[ApplicationLayer] ERROR : number expected : " + appLastSeq);
             }
         }
 
@@ -168,20 +173,20 @@ public class AppRcv extends Thread implements AppFeatures, InitFeatures, DataMap
     private void handleConfirmMsg() throws Exception {
         // compliance
         if (!appSnd.getConAppSndLock().isLocked()) {
-            if (DEBUG) {
-                System.out.println("[ApplicationLayer] ERROR : i was not wating for a confirm message !");
+            if(LOG.isDebugEnabled()) {
+                LOG.debug("[ApplicationLayer] ERROR : i was not wating for a confirm message !");
             }
         }
 
         if ((AC & 0xc0) != 0xc0) {
-            if (DEBUG) {
-                System.out.println("[ApplicationLayer] ERROR : error found by application control");
+            if(LOG.isDebugEnabled()) {
+                LOG.debug("[ApplicationLayer] ERROR : error found by application control");
             }
         }
 
         // unlock next request
-        if (DEBUG) {
-            System.out.println("[ApplicationLayer] received a confirm message. unlock send message");
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("[ApplicationLayer] received a confirm message. unlock send message");
         }
 
         appSnd.getConAppSndLock().unlock();
@@ -193,8 +198,8 @@ public class AppRcv extends Thread implements AppFeatures, InitFeatures, DataMap
     private void handleResponseMsg() throws Exception {
         if (appFirstFrame && ((AC & 0x80) != 0x80)) // i'm waiting for a first
         {
-            if (DEBUG) {
-                System.out.println("[ApplicationLayer] ERROR : it's not the first frame");
+            if(LOG.isDebugEnabled()) {
+                LOG.debug("[ApplicationLayer] ERROR : it's not the first frame");
             }
         }
 

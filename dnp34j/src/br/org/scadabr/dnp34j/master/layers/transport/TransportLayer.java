@@ -1,8 +1,12 @@
 package br.org.scadabr.dnp34j.master.layers.transport;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.org.scadabr.dnp34j.master.common.AppFeatures;
 import br.org.scadabr.dnp34j.master.common.InitFeatures;
 import br.org.scadabr.dnp34j.master.common.utils.Buffer;
+import br.org.scadabr.dnp34j.master.layers.DataMap;
 import br.org.scadabr.dnp34j.master.layers.application.AppRcv;
 import br.org.scadabr.dnp34j.master.layers.application.AppSnd;
 import br.org.scadabr.dnp34j.master.layers.link.LnkRcv;
@@ -16,7 +20,6 @@ import br.org.scadabr.dnp34j.master.session.DNPUser;
  * @version $Revision: 1.1.1.1 $
  */
 public class TransportLayer implements AppFeatures, InitFeatures {
-    static final boolean DEBUG = !TRS_QUIET;
 
     // =============================================================================
     // Attributes

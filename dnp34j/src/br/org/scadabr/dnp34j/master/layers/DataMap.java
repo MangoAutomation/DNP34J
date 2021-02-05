@@ -7,6 +7,9 @@
  */
 package br.org.scadabr.dnp34j.master.layers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.org.scadabr.dnp34j.master.common.DataLengths;
 import br.org.scadabr.dnp34j.master.common.DataMapFeatures;
 import br.org.scadabr.dnp34j.master.common.DataObject;
@@ -23,7 +26,8 @@ import br.org.scadabr.dnp34j.master.session.database.DataElement;
  *         &lt;alexis.clerc@sysaware.com&gt;</a>
  */
 public class DataMap implements DataMapFeatures, InitFeatures {
-    static final boolean DEBUG = !DATABASE_QUIET;
+
+    private static final Logger LOG = LoggerFactory.getLogger(DataMap.class);
 
     private DNPUser user;
 
@@ -696,8 +700,8 @@ public class DataMap implements DataMapFeatures, InitFeatures {
         if (user.getDatabase() != null)
             user.getDatabase().writeRecord(rec);
 
-        if (DEBUG) {
-            System.out.println("[DataMap " + this + "] Set : (G,V,I, value) " + group
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("[DataMap " + this + "] Set : (G,V,I, value) " + group
                     + " variation:" + variation + " index: " + index);
         }
     }
