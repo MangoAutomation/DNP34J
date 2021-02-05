@@ -71,6 +71,7 @@
 		<url>https://github.com/infiniteautomation/DNP34J</url>
 		<connection>scm:git:https://github.com/infiniteautomation/DNP34J.git</connection>
 		<developerConnection>scm:git:[push=]https://github.com/infiniteautomation/DNP34J.git[fetch=]https://github.com/infiniteautomation/DNP34J.git</developerConnection>
+		<tag>HEAD</tag>
 	</scm>
     <dependencies>
 		<dependency>
