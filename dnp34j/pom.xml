@@ -8,6 +8,24 @@
 		<log4jVersion>2.13.3</log4jVersion>
 		<slf4jVersion>1.8.0-beta4</slf4jVersion>
 	</properties>
+	<profiles>
+		<profile>
+            <id>javac-release</id>
+            <activation>
+                <jdk>[1.9,)</jdk>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <release>8</release>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+	</profiles>
     <build>
         <sourceDirectory>src</sourceDirectory>
         <testSourceDirectory>src-test</testSourceDirectory>

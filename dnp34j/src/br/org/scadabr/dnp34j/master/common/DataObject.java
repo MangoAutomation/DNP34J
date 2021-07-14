@@ -7,7 +7,6 @@
  */
 package br.org.scadabr.dnp34j.master.common;
 
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
@@ -253,7 +252,7 @@ public class DataObject implements InitFeatures, DataMapFeatures {
     public static final byte[] getShort(short value) {
         ByteBuffer buffer = ByteBuffer.allocate(2)
                 .order(ByteOrder.LITTLE_ENDIAN).putShort(value);
-        ((Buffer) buffer).rewind();
+        buffer.rewind();
         byte[] bytes = new byte[buffer.remaining()];
         buffer.get(bytes);
         return bytes;
@@ -267,7 +266,7 @@ public class DataObject implements InitFeatures, DataMapFeatures {
     public static final byte[] getInt(int value) {
         ByteBuffer buffer = ByteBuffer.allocate(4)
                 .order(ByteOrder.LITTLE_ENDIAN).putInt(value);
-        ((Buffer) buffer).rewind();
+        buffer.rewind();
         byte[] bytes = new byte[buffer.remaining()];
         buffer.get(bytes);
         return bytes;
@@ -281,7 +280,7 @@ public class DataObject implements InitFeatures, DataMapFeatures {
     public static final byte[] getFloat(float value) {
         ByteBuffer buffer = ByteBuffer.allocate(4)
                 .order(ByteOrder.LITTLE_ENDIAN).putFloat(value);
-        ((Buffer) buffer).rewind();
+        buffer.rewind();
         byte[] bytes = new byte[buffer.remaining()];
         buffer.get(bytes);
         return bytes;
@@ -295,7 +294,7 @@ public class DataObject implements InitFeatures, DataMapFeatures {
     public static final byte[] getDouble(double value) {
         ByteBuffer buffer = ByteBuffer.allocate(8)
                 .order(ByteOrder.LITTLE_ENDIAN).putDouble(value);
-        ((Buffer) buffer).rewind();
+        buffer.rewind();
         byte[] bytes = new byte[buffer.remaining()];
         buffer.get(bytes);
         return bytes;
