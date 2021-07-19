@@ -7,6 +7,7 @@
 	<properties>
 		<log4jVersion>2.13.3</log4jVersion>
 		<slf4jVersion>1.8.0-beta4</slf4jVersion>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<profiles>
 		<profile>
