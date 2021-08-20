@@ -82,13 +82,13 @@
         </plugins>
     </build>
 	<issueManagement>
-		<url>https://github.com/infiniteautomation/DNP34J/issues</url>
+		<url>https://github.com/MangoAutomation/DNP34J/issues</url>
 		<system>github</system>
 	</issueManagement>
 	<scm>
-		<url>https://github.com/infiniteautomation/DNP34J</url>
-		<connection>scm:git:https://github.com/infiniteautomation/DNP34J.git</connection>
-		<developerConnection>scm:git:[push=]https://github.com/infiniteautomation/DNP34J.git[fetch=]https://github.com/infiniteautomation/DNP34J.git</developerConnection>
+		<url>https://github.com/MangoAutomation/DNP34J</url>
+		<connection>scm:git:https://github.com/MangoAutomation/DNP34J.git</connection>
+		<developerConnection>scm:git:[push=]https://github.com/MangoAutomation/DNP34J.git[fetch=]https://github.com/MangoAutomation/DNP34J.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
     <dependencies>
