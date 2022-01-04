@@ -5,7 +5,7 @@
     <version>2.0.4-SNAPSHOT</version>
     <name>dnp34j Library</name>
 	<properties>
-		<log4jVersion>2.16.0</log4jVersion>
+		<log4jVersion>2.17.1</log4jVersion>
 		<slf4jVersion>1.8.0-beta4</slf4jVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
